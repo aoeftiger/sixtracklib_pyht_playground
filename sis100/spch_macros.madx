@@ -1,0 +1,34 @@
+option, -echo;
+
+install_placeholder(elemname, nbr, totnmbr): macro =	{	
+
+	install, element=elemname_nbr, class=placeholder, at=nbr*circumf/totnmbr;
+
+};
+
+
+install_spch(data_table, elemname, nbr, newname,totnmbr): macro =	{	
+	
+	BETAX:=table(data_table,elemname_nbr,BETX)	;
+	!value, betax;
+	SIGX_nbr:=sqrt(epsx_rms_fin*BETAX)		; 
+
+	BETAY:=table(data_table,elemname_nbr,BETY)	;
+	SIGY_nbr:=sqrt(epsy_rms_fin*BETAY)		;
+
+	x_co_NB:=table(data_table,elemname_nbr, x)	; 
+	y_co_NB:=table(data_table,elemname_nbr, y)	;
+
+	l_sc_segm_nbr = circumf/totnmbr;
+	!value, l_sc_segm_nbr;
+	
+	charge_bb_nbr=z_particle_true*B_bunching*l_sc_segm_nbr/circumf/(gammaRel^2-1);
+
+	newname_nbr: beambeam, SIGX=SIGX_nbr, SIGY=SIGY_nbr, XMA=x_co_NB, YMA=y_co_NB, CHARGE=charge_bb_nbr;
+
+	replace, element=elemname_nbr, by=newname_nbr;
+	
+
+};
+
+option, echo;

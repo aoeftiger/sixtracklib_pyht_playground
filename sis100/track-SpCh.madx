@@ -1,0 +1,143 @@
+TITLE, "SIS100 test implementing SpCh";
+Option, -echo, -info, -warn;
+call, file = "SIS100_RF_220618_9slices.thin.seq";
+call, file = "OpticsYEH_BeamParameters.str";				//magnet settings & beam parameters
+
+call, file = "Coll+Errors+BeamDistr.madx";
+call, file = "spch_macros.madx";
+
+option,	bborbit				=	true	;
+option,	bb_ultra_relati		=	true	;
+option,	bb_sxy_update		=	true	;
+option,	emittance_update	=	false	; 
+
+!!!Tracking parameters
+number_particles	=	1000					;
+total_turns			=	20000					;
+gauss_cut			=	2.0						;
+ffile_stat			=	1000					;
+
+Option, -echo, -info, -warn;
+Beam,particle = U28, charge = charge_proj, mass=mass_proj, energy=energy_tot, ex = epsx_rms_fin, ey = epsy_rms_fin, npart = N_particles ;				//sequence=SIS100RING, 
+
+use, sequence=SIS100RING;
+//Inserting placeholders equidistantly in the sequence for future replacement by the beambeam (space charge kicks).
+//Number of placeholders to be inserted (numb_spch_kicks) is defined in "OpticsYEH_BeamParameters.str"
+
+seqedit, sequence=SIS100RING;
+flatten;
+i=1;
+while (i<=numb_spch_kicks)
+{
+exec,install_placeholder(SCsample, $i, numb_spch_kicks);
+i=i+1;
+}
+flatten;
+endedit;
+
+use, sequence=SIS100RING;
+
+//Adding the collimators and cryo-catchers
+!exec,coll-cryocat;
+
+eoption, add=true, seed = 1;
+
+exec,EA_EFCOMP_MH();
+slice = 1;
+while (slice<=9)
+{
+exec,EA_rEFCOMP_QD($slice,1);
+slice=slice+1;
+}
+
+SELECT, FLAG = ERROR, PATTERN=QD11..,	class=MULTIPOLE;
+SELECT, FLAG = ERROR, PATTERN=QD12..,	class=MULTIPOLE;
+SELECT, FLAG = ERROR, PATTERN=mh1,	class=MULTIPOLE;
+SELECT, FLAG = ERROR, PATTERN=mh2,	class=MULTIPOLE;
+ESAVE,	FILE = "errors1_84_73_1";
+
+match, sequence=SIS100RING;
+global, sequence=SIS100RING, q1=18+0.84, q2=18+0.73;
+vary, name=kqf, step=0.00001;
+vary, name=kqd, step=0.00001;
+lmdif, calls=500, tolerance=1.0e-10;
+endmatch;
+
+SELECT, flag=twiss, clear;
+SELECT, flag=twiss, column=name,keyword,s,betx,alfx,dx,dpx,x,px,bety,alfy,dy,dpy,y,py,t,pt,k1l	;
+TWISS,	table=twiss, file="matched_84_73_1";
+
+//Inserting space charge kicks instead of placeholders
+seqedit, sequence=SIS100RING;
+flatten;
+j=1;
+while (j<=numb_spch_kicks)
+{
+exec,install_spch(twiss, SCsample, $j, spch_bb,  numb_spch_kicks);
+j=j+1;
+}
+flatten;
+endedit;
+
+use, sequence=SIS100RING;
+
+//Adding the collimators and cryo-catchers
+!exec,coll-cryocat;
+
+eoption, add=true, seed = 1;
+
+exec,EA_EFCOMP_MH();
+slice = 1;
+while (slice<=9)
+{
+exec,EA_rEFCOMP_QD($slice,1);
+slice=slice+1;
+}
+
+SELECT, FLAG = ERROR, PATTERN=QD11..,	class=MULTIPOLE;
+SELECT, FLAG = ERROR, PATTERN=QD12..,	class=MULTIPOLE;
+SELECT, FLAG = ERROR, PATTERN=mh1,	class=MULTIPOLE;
+SELECT, FLAG = ERROR, PATTERN=mh2,	class=MULTIPOLE;
+ESAVE,	FILE = "errors2_84_73_1";
+
+SELECT, flag=twiss, clear;
+SELECT, flag=twiss, column=name, keyword,s,betx,bety,alfx,alfy,x,px,y,py;
+TWISS,  file="SpCh_84_73_1.twiss";
+
+cavity_voltage := 58.2/1000/number_cavities*charge_proj;	
+
+select,flag="spch_bb",pattern="ring\$START";
+select,flag="spch_bb",class="beambeam",column=name,keyword,s,betx,bety,alfx,alfy,dx,dpx,dy,dpy;
+twiss, table="spch_bb",file="spch_bb_twiss_ini.dat";
+readtable, file="spch_bb_twiss_ini.dat";
+
+option,	bborbit				=	true	;
+option,	bb_ultra_relati		=	true	;
+option,	bb_sxy_update		=	true	;
+option,	emittance_update	=	true	; 
+option, sc_chrom_fix		=	true	;
+option, exit_loss_turn		=	false	;
+
+eoption, seed = 1;
+
+TRACK, onepass,onetable,recloss,APERTURE, file="track_Spch_";		//dump,
+
+n=0;
+while(n<number_particles)
+{	
+	exec, 6D_beam(gauss_cut,twiss);
+	n=n+1;
+}
+run,turns=total_turns,ffile=ffile_stat, n_part_gain=1.0,i_div_e_sum_max=5,track_harmon=10,sigma_z=bunch_length,deltap_rms=deltap_rms, deltap_max=deltap_max,maxaper={1.0,1.0,1.0,1.0,1000.0,1000.0}	; 
+endtrack;
+
+write,table=bb6d_ixy,file="bb6d_ixy.txt";
+
+write,table=tracksumm,file="tracksumm_84_73_1";
+write,table=trackloss,file="trackloss_84_73_1";
+
+SELECT, flag=twiss,clear;
+SELECT, flag=twiss, column=name, keyword,s, betx,bety, alfx, alfy,dx,dy,k1l,x,px,y,py;
+TWISS,  file="after_track_84_73_1.twiss";
+
+STOP;

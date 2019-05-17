@@ -1,0 +1,68 @@
+TITLE, "SIS100 test implementing SpCh";
+Option, -echo, -info, -warn;
+call, file = "SIS100_RF_220618_9slices.thin.seq"	;	//thin lattice with 9 slices of quadrupoles
+call, file = "OpticsYEH_BeamParameters.str"		;	//beam parameters and magnet settings for Fast Extraction
+call, file = "Coll+Errors+BeamDistr.madx"					;	//All macros (collimators, magnet errors, table access, beam creation) needed for the script running
+
+!!!Tracking parameters
+number_particles	=	1000					;
+total_turns			=	1; !!20000					;
+gauss_cut			=	2.0						;
+ffile_stat			=	1; !!000					;
+
+Beam,sequence=SIS100RING, particle = U28, charge = charge_proj, mass=mass_proj, energy=energy_tot	;//, ex = epsx_rms_fin, ey = epsy_rms_fin, npart = N_particles ;
+
+use, sequence=SIS100RING;
+//Adding the collimators and cryo-catchers
+!exec,coll-cryocat;
+
+eoption, add=true, seed = 1;
+
+
+exec,EA_EFCOMP_MH();
+
+slice = 1;
+while (slice<=9)
+{
+exec,EA_rEFCOMP_QD($slice,1);
+slice=slice+1;
+}
+
+SELECT, FLAG = ERROR, PATTERN=QD11..,	class=MULTIPOLE;
+SELECT, FLAG = ERROR, PATTERN=QD12..,	class=MULTIPOLE;
+SELECT, FLAG = ERROR, PATTERN=mh1,	class=MULTIPOLE;
+SELECT, FLAG = ERROR, PATTERN=mh2,	class=MULTIPOLE;
+ESAVE,	FILE = "errors_84_73_1";
+
+match, sequence=SIS100RING;
+global, sequence=SIS100RING, q1=18+0.84, q2=18+0.73;
+vary, name=kqf, step=0.00001;
+vary, name=kqd, step=0.00001;
+lmdif, calls=500, tolerance=1.0e-10;
+endmatch;
+
+SELECT, flag=twiss, clear;
+SELECT, flag=twiss, column=name,keyword,s,betx,alfx,dx,dpx,x,px,bety,alfy,dy,dpy,y,py,t,pt,k1l	;
+TWISS,	table=twiss, file="matched_84_73_1";
+
+cavity_voltage = 58.2/1000/number_cavities;
+
+eoption, seed = 1;
+
+TRACK, onepass, recloss,APERTURE,onetable, file="track_noSpch_";
+
+n=0;
+while(n<number_particles)
+{
+	exec, 6D_beam(gauss_cut,twiss);
+	n=n+1;
+}
+
+run,turns=total_turns,ffile=ffile_stat,maxaper={1.0,1.0,1.0,1.0,1000.0,1000.0}	;
+endtrack;
+
+write,table=tracksumm,file="tracksumm_84_73_1";
+write,table=trackloss,file="trackloss_84_73_1";
+
+
+STOP;

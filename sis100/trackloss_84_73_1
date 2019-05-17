@@ -1,0 +1,8 @@
+@ NAME             %09s "TRACKLOSS"
+@ TYPE             %09s "TRACKLOSS"
+@ TITLE            %29s "SIS100 test implementing SpCh"
+@ ORIGIN           %16s "5.04.02 Linux 64"
+@ DATE             %08s "15/05/19"
+@ TIME             %08s "19.54.58"
+*     NUMBER       TURN                  X                 PX                  Y                 PY                  T                 PT                  S                  E ELEMENT            
+$         %d         %d                %le                %le                %le                %le                %le                %le                %le                %le %s                 
