@@ -1,0 +1,53 @@
+Title, "Test FODO";
+Option, -echo,-info,-warn;
+call,file="beam-distr.madx";
+!call,file="SIS100QUADS.thick.seq";
+call,file="SIS100QUADS.thin.seq";
+
+epsx_gauss=35e-6/4;
+epsy_gauss=15e-6/4;
+number_particles = 1000;
+number_turns=20000;
+ffile_stat=1000;
+gauss_cut=2;
+
+kqd = -0.1929057321;
+kqf = 0.1929057321;
+
+Option, -echo,-info,-warn;
+
+Beam, sequence=SIS100QUADS, particle = proton, energy=1;
+
+use,sequence=SIS100QUADS;
+
+match, sequence=SIS100QUADS;
+global, sequence=SIS100QUADS, q1=18.88, q2=18.88;
+vary, name = kqf, step=0.0001;
+vary, name = kqd, step=0.0001;
+lmdif, tolerance=1e-20;
+endmatch;
+
+SELECT, flag=twiss, clear;
+SELECT, flag=twiss, column=name,keyword,s,k1l,betx,bety,alfx,alfy,dx,dy,x,y,px,py	;
+twiss, sequence=SIS100QUADS, file="twiss_AllCold.thin";
+
+/*
+SELECT, FLAG=makethin, class=quadrupole, SLICE=1;
+makethin, sequence=SIS100QUADS;
+save, sequence=SIS100QUADS, file="SIS100QUADS.thin.seq";
+*/
+/*
+track, onepass,onetable,file="track_AllCold_thin_";
+n=0;
+while(n<number_particles)
+{	
+	exec, 6D_beam(gauss_cut,twiss);
+	n=n+1;
+}
+
+run,turns=number_turns,ffile=ffile_stat;
+endtrack;
+*/
+
+value, kqf, kqd;
+STOP;
