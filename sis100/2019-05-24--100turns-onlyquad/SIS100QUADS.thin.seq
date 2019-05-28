@@ -1,5 +1,5 @@
-kqd = -0.1929057321;
-kqf = 0.1929057321;
+kqd := -0.1929057321;
+kqf := 0.1929057321;
 s11qd11: multipole,lrad:= 1.3,knl:={ 0,( kqd ) * ( 1.3 ) };
 s11qd12: multipole,lrad:= 1.3,knl:={ 0,( kqf ) * ( 1.3 ) };
 s12qd11: multipole,lrad:= 1.3,knl:={ 0,( kqd ) * ( 1.3 ) };
