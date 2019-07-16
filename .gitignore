@@ -1,5 +1,6 @@
 *.ipynb_checkpoints
 clDeviceQuery
+__pycache__
 
 sis100/2019-05-29--tunescan/errors_*done
 sis100/2019-05-29--tunescan/errors_*full-lattice.seq
