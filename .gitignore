@@ -8,6 +8,8 @@ sis100/2019-05-29--tunescan/errors_*.npy
 sis100/2019-05-29--tunescan/errors_*_lost_at_turn.npy
 #sis100/2019-05-29--tunescan/errors_*_summary.p
 
+fodo_sc/015_same-as-014_20-sc-nodes/vid_poincare/
+
 *.p
 *.h5
 *.h5part
