@@ -6,4 +6,8 @@ sis100/2019-05-29--tunescan/errors_*done
 sis100/2019-05-29--tunescan/errors_*full-lattice.seq
 sis100/2019-05-29--tunescan/errors_*.npy
 sis100/2019-05-29--tunescan/errors_*_lost_at_turn.npy
-sis100/2019-05-29--tunescan/errors_*_summary.p
+#sis100/2019-05-29--tunescan/errors_*_summary.p
+
+*.p
+*.h5
+*.h5part
