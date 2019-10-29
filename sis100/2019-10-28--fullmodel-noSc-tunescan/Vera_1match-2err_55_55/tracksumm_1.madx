@@ -1,0 +1,74 @@
+TITLE, "SIS100 test implementing SpCh";
+Option, -echo, -info, -warn;
+call, file = "/lustre/bhs/vchetver/nocoll-YEH/1match-2err/SIS100_RF_220618_9slices.thin.seq"	;	//thin lattice with 9 slices of quadrupoles
+call, file = "/lustre/bhs/vchetver/nocoll-YEH/1match-2err/OpticsYEH_BeamParameters.str"		;	//beam parameters and magnet settings for Fast Extraction
+call, file = "/lustre/bhs/vchetver/nocoll-YEH/1match-2err/All-macros-upd-QD.madx"					;	//All macros (collimators, magnet errors, table access, beam creation) needed for the script running
+
+!!!Tracking parameters
+number_particles	=	1000					;
+number_turns		=	20000					;
+total_turns			=	20000					;
+gauss_cut			=	2.0						;
+ffile_stat			=	1000					;
+
+Beam,sequence=SIS100RING, particle = U28, charge = charge_proj, mass=mass_proj, energy=energy_tot	;//, ex = epsx_rms_fin, ey = epsy_rms_fin, npart = N_particles ;
+
+use, sequence=SIS100RING;
+Option, -echo, -info, -warn;
+
+match, sequence=SIS100RING;
+global, sequence=SIS100RING, q1=18+0.55, q2=18+0.55;
+vary, name=kqf, step=0.00001;
+vary, name=kqd, step=0.00001;
+lmdif, calls=500, tolerance=1.0e-10;
+endmatch;
+
+SELECT, flag=twiss, clear;
+SELECT, flag=twiss, column=name,keyword,s,betx,alfx,dx,dpx,x,px,bety,alfy,dy,dpy,y,py,t,pt,k1l	;
+TWISS,	table=twiss, file="/lustre/bhs/vchetver/nocoll-YEH/1match-2err/55_55/matched_55_55_1";
+
+eoption, add=true, seed = 1;
+!exec,coll-cryocat;
+
+exec,EA_EFCOMP_MH();
+
+slice = 1;
+while (slice<=9)
+{
+exec,EA_rEFCOMP_QD($slice,1);
+slice=slice+1;
+}
+
+SELECT, FLAG = ERROR, PATTERN=QD11..,	class=MULTIPOLE;
+SELECT, FLAG = ERROR, PATTERN=QD12..,	class=MULTIPOLE;
+SELECT, FLAG = ERROR, PATTERN=mh1,	class=MULTIPOLE;
+SELECT, FLAG = ERROR, PATTERN=mh2,	class=MULTIPOLE;
+ESAVE,	FILE = "/lustre/bhs/vchetver/nocoll-YEH/1match-2err/55_55/errors_55_55_1";
+
+SELECT, flag=twiss, clear;
+SELECT, flag=twiss, column=name,keyword,s,betx,alfx,dx,dpx,x,px,bety,alfy,dy,dpy,y,py,t,pt,k1l	;
+TWISS,	table=twiss, file="/lustre/bhs/vchetver/nocoll-YEH/1match-2err/55_55/twiss_55_55_1";
+
+!eta=table(summ,alfa)-1.0/gammaRel^2;
+!cavity_voltage = (delta_rms/phi_rms)^2*twopi*betaRel^2*energy_tot*1e9*harmonic_number*abs(eta)/(charge_proj*cos(phi_s))/1e6/number_cavities;
+
+cavity_voltage = 58.2/1000/number_cavities;	
+
+eoption, seed = 123456;
+
+TRACK, onepass, recloss,APERTURE,onetable,file="/lustre/bhs/vchetver/nocoll-YEH/1match-2err/55_55/track_55_55_1_20000_";
+
+n=0;
+while(n<number_particles)
+{	
+	exec, 6D_beam(gauss_cut,twiss);
+	n=n+1;
+}
+
+run,turns=total_turns,ffile=ffile_stat,maxaper={1.0,1.0,1.0,1.0,1000.0,1000.0}	;
+endtrack;
+
+write,table=tracksumm,file="/lustre/bhs/vchetver/nocoll-YEH/1match-2err/55_55/tracksumm_55_55_1_20000";
+write,table=trackloss,file="/lustre/bhs/vchetver/nocoll-YEH/1match-2err/55_55/trackloss_55_55_1_2000";
+
+STOP;
