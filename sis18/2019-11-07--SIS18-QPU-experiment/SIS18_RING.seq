@@ -1,0 +1,580 @@
+// -------------------SIS18 lattice for madx-----------------
+
+// define length and cell number of SIS18--------------------
+CIRCUM = 216.720;
+NCELL = 12;
+LCELL = CIRCUM/NCELL;
+//-----------------------------------------------------------
+BEGIN:  MARKER;
+END:    MARKER;
+M6431:  MARKER;
+M12430: MARKER;
+M12970: MARKER;
+M17785: MARKER;
+PEX: MARKER;
+PSE: MARKER;
+PSI: MARKER;
+//-----------------------------------------------------------
+// define bending magnets ----------------------------------------------------------
+
+GS00MU_ANGLE = PI/(NCELL);
+VALUE,GS00MU_ANGLE;
+
+GS00MU_RADIUS =10.41;
+GS00MU_LEFF=GS00MU_RADIUS * GS00MU_ANGLE;
+L_PERIOD = LCELL;
+L_DIP_ARC = 2.618;
+L_DPCH_IN_GEO = 0.275; // drift space bevor the first dipole
+L_DPCH_OUT_GEO = 0.225; //drift space between the second dipole and the collimator chamber
+L_DIP_CHAMBER = L_DIP_ARC + L_DPCH_IN_GEO + L_DPCH_OUT_GEO;
+
+L_DD_ARC = 0.97; // length between the first and the second dipole 
+L_MU1MU2 = L_DD_ARC - L_DPCH_IN_GEO - L_DPCH_OUT_GEO;
+DLEFF = (GS00MU_LEFF - L_DIP_ARC)/2 ;
+L_DPCH_IN = L_DPCH_IN_GEO - DLEFF; 
+L_DPCH_OUT = L_DPCH_OUT_GEO - DLEFF;
+L_ARC = 2 * L_DIP_CHAMBE + L_MU1MU2;
+L_STRAIGHT=  L_PERIOD - L_ARC;
+//
+L_dpexit_colbegin=0.210; // length between the exit of the second dipole and the collimator
+D_DC: DRIFT, L = L_dpexit_colbegin;
+
+value, L_DPCH_IN ;
+value, L_DPCH_OUT;
+value, GS00MU_LEFF - 2.618;
+
+
+GS00MU11: SBEND, L = GS00MU_LEFF/2, ANGLE = GS00MU_ANGLE/2,
+                E1 =  GS00MU_ANGLE/2, E2 = 0.,
+              APERTYPE = ELLIPSE,   APERTURE = {0.1907/2,0.0707/2}; 
+GS00MU12: SBEND, L = GS00MU_LEFF/2, ANGLE = GS00MU_ANGLE/2,
+                E1 = 0., E2 =  GS00MU_ANGLE/2,
+              HGAP = 0.035, H1 = 0.045, H2 = 0.045,
+              APERTYPE = ELLIPSE,   APERTURE = {0.1907/2,0.0707/2};
+D_MU1MU2:  DRIFT, L =L_MU1MU2;
+D_DPCH_IN: DRIFT, L =L_DPCH_IN;  
+D_DPCH_OUT:DRIFT, L =L_DPCH_OUT;
+DP_ADJUST: DRIFT, L = 0.00000; //0.0005 ist the Adjust of the dipole's length;
+
+DPM: LINE = (D_DPCH_IN, GS00MU11,GS00MU1A,GS00MU12, D_DPCH_OUT,
+             D_MU1MU2,D_DPCH_IN, GS00MU11,GS00MU2A,GS00MU12, D_DPCH_OUT, DP_ADJUST, M6431);
+//dipole modules for sector 6 and 10 no colliamator---------------------------
+DPM6_10 : LINE = (D_DPCH_IN, GS00MU11,GS00MU12, D_DPCH_OUT,
+             D_MU1MU2,D_DPCH_IN, GS00MU11,GS00MU12, D_DPCH_OUT, M6431)
+//-----------------------------------------------------------
+// define quadrupoles----------------------------------------
+GS00QS1F_LEFF = 1.040 ;
+GS00QS2D_LEFF = 1.040;
+GS00QS3T_LEFF = 0.480;
+//K1_GS01QS1F :=  0.288240452E+00;
+//K1_GS01QD2D := -0.493745808E+00;
+//K1_GS12QS1F :=  0.288240452E+00;
+//K1_GS12QD2D := -0.493745808E+00;
+//K1_GS00QS3T :=  0.644759042E+00; 
+
+// focusing strength for MIRKO-------------------------------
+K1L_GS01QS1F := K1_GS01QS1F * GS00QS1F_LEFF;  
+K1L_GS01QD2D := K1_GS01QD2D * GS00QS2D_LEFF; 
+K1L_GS12QS1F := K1_GS12QS1F * GS00QS1F_LEFF;  
+K1L_GS12QD2D := K1_GS12QD2D * GS00QS2D_LEFF; 
+K1L_GS00QS3T := K1_GS00QS3T * GS00QS3t_LEFF;
+//-----------------------------------------------------------
+// focusing strength for MADX--------------------------------
+K1_GS01QS1F := K1L_GS01QS1F /GS00QS1F_LEFF; 
+K1_GS01QD2D := K1L_GS01QD2D /GS00QS2D_LEFF;
+K1_GS12QS1F := K1L_GS12QS1F /GS00QS1F_LEFF;
+K1_GS12QD2D := K1L_GS12QD2D /GS00QS2D_LEFF;
+K1_GS00QS3T := K1L_GS00QS3T /GS00QS3t_LEFF;
+//-----------------------------------------------------------
+
+GS01QS1F: QUADRUPOLE, L = GS00QS1F_LEFF, K1 := K1_GS01QS1F,
+        APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+GS01QS2D: QUADRUPOLE, L = GS00QS2D_LEFF, K1 := K1_GS01QD2D,
+        APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+GS12QS1F: QUADRUPOLE, L = GS00QS1F_LEFF, K1 := K1_GS12QS1F,
+        APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+GS12QS2D: QUADRUPOLE, L = GS00QS2D_LEFF, K1 := K1_GS12QD2D,
+        APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+
+GS00QS3T: QUADRUPOLE, L = GS00QS3T_LEFF, K1 := K1_GS00QS3T,
+        APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+//GS00QS1F: GS00QS1F, K1 := K1_GS00QS1F;
+//GS00QS2D: GS00QS2D, K1 := K1_GS00QD2D;
+//GS00QS3T: GS00QS3T, K1 := K1_GS00QS3T;
+//-----------------------------------------------------------
+
+// define orbit correctors-----------------------------------
+GS00MU1A_L  := 0.00000;
+GS00KM2DV_L := 0.60000;
+KNL_GS00MU1A  := 0.00001;
+KNL_GS00KM2DV := 0.00001;
+GS00MU1A :  HKICKER, L = GS00MU1A_L,  KICK = KNL_GS00MU1A,APERTYPE = ELLIPSE,   APERTURE = {0.1907/2,0.0707/2};
+GS00MU2A : GS00MU1A;
+GS00KM2DV : VKICKER, L = GS00KM2DV_L, KICK = KNL_GS00KM2DV;
+//------------------------------------------------------------
+// define orbit monitors -------------------------------------
+GS00DX5_L = 0.2655;
+GS00DX5H_L = GS00DX5_L/2;
+GS00DX5V_L = GS00DX5_L/2;
+BPM_EDGE : RCOLLIMATOR, L = 0.002,  YSIZE = 0.0615/2; // BPM edges at the begin and at the end
+GS00DX5H: HMONITOR, L = GS00DX5H_L, APERTYPE = RECTANGLE, APERTURE = {0.206/2, 0.066/2};
+GS00DX5V: VMONITOR, L = GS00DX5V_L, APERTYPE = RECTANGLE, APERTURE = {0.206/2, 0.066/2};
+GS00DX5: LINE = (BPM_EDGE, GS00DX5H, GS00DX5V, BPM_EDGE);
+//-----------------------------------------------------------
+
+// define corrector's quadrupoles----------------------------
+GS00KQ_L := 0.350;
+K1_GS00KQ1E:= 0.000;
+K1_GS00KQ4 := 0.000;
+GS00KQ: QUADRUPOLE, L = GS00KQ_L, K1 :=  K1_GS00KQ1E, 
+        APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+//-----------------------------------------------------------
+
+// define sextupoles-----------------------------------------
+GS00KS_L = 0.320;
+GS00KM3SN_L = 0.350;
+K1_GS00KS1C  := 0.0000;
+K1_GS00KS3C  := 0.0000;
+K1_GS00KM3SN := 0.0000;
+GS00KS1C : SEXTUPOLE, L = GS00KS_L,K2 := K1_GS00KS1C,
+ APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+GS00KS3C : SEXTUPOLE, L = GS00KS_L,K2 := K1_GS00KS3C,
+ APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+GS00KM3SN: SEXTUPOLE, L = GS00KM3SN_L, K2 := K1_GS00KM3SN,
+ APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+//-----------------------------------------------------------
+
+// define skew quarupoles------------------------------------
+//-----------------------------------------------------------
+// define mutlipoles for periode 1, 2, 4, 6, 7, 8, 10 & 12---
+// the definition for other periode, which just have skew qd.
+L_MULTIPOLES = 0.350;
+D_MULTIPOLES: DRIFT, L = L_MULTIPOLES/2;
+GS01KM: MULTIPOLE,  KNL := {0, k1_GS01KQ4, 0}, KSL := {0, k1_GS01KM3QS, k1_GS01KM5SS}, APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+GS02KM: MULTIPOLE,  KNL := {0, k1_GS02KQ4, 0}, KSL := {0, k1_GS02KM3QS, k1_GS02KM5SS}, APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+GS04KM: MULTIPOLE,  KNL := {0, k1_GS04KQ4, 0}, KSL := {0, k1_GS04KM3QS, k1_GS04KM5SS}, APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+GS06KM: MULTIPOLE,  KNL := {0, k1_GS06KQ4, 0}, KSL := {0, k1_GS06KM3QS, k1_GS06KM5SS}, APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+GS07KM: MULTIPOLE,  KNL := {0, k1_GS07KQ4, 0}, KSL := {0, k1_GS07KM3QS, k1_GS07KM5SS}, APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+GS08KM: MULTIPOLE,  KNL := {0, k1_GS08KQ4, 0}, KSL := {0, k1_GS08KM3QS, k1_GS08KM5SS}, APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+GS10KM: MULTIPOLE,  KNL := {0, k1_GS10KQ4, 0}, KSL := {0, k1_GS10KM3QS, k1_GS10KM5SS}, APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+GS12KM: MULTIPOLE,  KNL := {0, k1_GS12KQ4, 0}, KSL := {0, k1_GS12KM3QS, k1_GS12KM5SS}, APERTYPE = ELLIPSE,   APERTURE = {0.2007/2,0.1167/2};
+GS01KM_M : LINE = (D_MULTIPOLES, GS01KM, D_MULTIPOLES);
+GS02KM_M : LINE = (D_MULTIPOLES, GS02KM, D_MULTIPOLES);
+GS04KM_M : LINE = (D_MULTIPOLES, GS04KM, D_MULTIPOLES);
+GS06KM_M : LINE = (D_MULTIPOLES, GS06KM, D_MULTIPOLES);
+GS07KM_M : LINE = (D_MULTIPOLES, GS07KM, D_MULTIPOLES);
+GS08KM_M : LINE = (D_MULTIPOLES, GS08KM, D_MULTIPOLES);
+GS10KM_M : LINE = (D_MULTIPOLES, GS10KM, D_MULTIPOLES);
+GS12KM_M : LINE = (D_MULTIPOLES, GS12KM, D_MULTIPOLES);
+//-----------------------------------------------------------
+
+/// define collimators--------------------------------------------------------- 
+L_SCRAPER = 0.000000;
+GS00DS_L = 0.05;
+DS00DS: DRIFT, L = GS00DS_L;
+DX_CEC = TAN ( 4 * PI/180) * GS00DS_L;
+GS00DS2 :  RCOLLIMATOR, L = GS00DS_L, XSIZE = 0.04550;
+// Position for collimators
+POS_CECI_01 = -0.0555; 
+POS_CECI_02 = -0.0455;
+POS_CECI_03 = -0.0555;
+POS_CECI_04 = -0.0655;
+POS_CECI_05 = -0.0455;
+POS_CECI_05 = -0.0555;
+POS_CECI_07 = -0.0505;
+POS_CECI_08 = -0.0455;
+POS_CECI_09 = -0.0455;
+POS_CECI_11 = -0.0455;
+POS_CECI_12 = -0.0455;
+POS_CECA_01 = 0.0455; 
+POS_CECA_02 = 0.0505; 
+POS_CECA_03 = 0.0455; 
+POS_CECA_04 = 0.0455; 
+POS_CECA_05 = 0.0455; 
+POS_CECA_07 = 0.0405; 
+POS_CECA_08 = 0.0505; 
+POS_CECA_09 = 0.0555; 
+POS_CECA_11 = 0.0555; 
+POS_CECA_12 = 0.0555; 
+// position for horizontaly displaceable collimators-------------------------- 
+POS_CECIH_03 = -0.0555; 
+POS_CECIH_11 = -0.0450; 
+POS_CECAH_12 =  0.0750; 
+POS_CECIH_12 = -0.0700;
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+CECI :  RCOLLIMATOR, L = L_SCRAPER; // collimator for the inner side
+CECA :  RCOLLIMATOR, L = L_SCRAPER; // collimator for the outer side
+//GS01DS----------------------------------------------------------------------
+GS01DSAI : CECI, XSIZE = POS_CECI_01;
+GS01DSAA : CECA, XSIZE = POS_CECA_01;
+GS01DSAI_END : CECI, XSIZE = POS_CECI_01 - DX_CEC;
+GS01DSAA_END : CECA, XSIZE = POS_CECA_01 + DX_CEC;
+GS01DS : LINE = (GS01DSAI, GS01DSAA, DS00DS, GS01DSAI_END, GS01DSAA_END);
+//GS01DS : RCOLLIMATOR, L = GS00DS_L, APERTYPE = RECTANGLE, APERTURE = {-0.0555,100}, TILT = 0.005;
+//----------------------------------------------------------------------------
+//GS02DS----------------------------------------------------------------------
+GS02DSAI : CECI, XSIZE = POS_CECI_02;
+GS02DSAA : CECA, XSIZE = POS_CECA_02;
+GS02DSAI_END : CECI, XSIZE = POS_CECI_02 - DX_CEC;
+GS02DSAA_END : CECA, XSIZE = POS_CECA_02 + DX_CEC;
+GS02DS : LINE = (GS02DSAI, GS02DSAA, DS00DS, GS02DSAI_END, GS02DSAA_END);
+//----------------------------------------------------------------------------
+//GS03DS----------------------------------------------------------------------
+GS03DSAI : CECI, XSIZE = POS_CECI_03;
+GS03DSAA : CECA, XSIZE = POS_CECA_03;
+GS03DSAI_END : CECI, XSIZE = POS_CECI_03 - DX_CEC;
+GS03DSAA_END : CECA, XSIZE = POS_CECA_03 + DX_CEC;
+GS03DS : LINE = (GS03DSAI, GS03DSAA, DS00DS, GS03DSAI_END, GS03DSAA_END);
+//----------------------------------------------------------------------------
+//GS04DS----------------------------------------------------------------------
+GS04DSAI : CECI, XSIZE = POS_CECI_04;
+GS04DSAA : CECA, XSIZE = POS_CECA_04;
+GS04DSAI_END : CECI, XSIZE = POS_CECI_04 - DX_CEC;
+GS04DSAA_END : CECA, XSIZE = POS_CECA_04 + DX_CEC;
+GS04DS : LINE = (GS04DSAI, GS04DSAA, DS00DS, GS04DSAI_END, GS04DSAA_END);
+//----------------------------------------------------------------------------
+//GS05DS----------------------------------------------------------------------
+GS05DSAI : CECI, XSIZE = POS_CECI_05;
+GS05DSAA : CECA, XSIZE = POS_CECA_05;
+GS05DSAI_END : CECI, XSIZE = POS_CECI_05 - DX_CEC;
+GS05DSAA_END : CECA, XSIZE = POS_CECA_05 + DX_CEC;
+GS05DS : LINE = (GS05DSAI, GS05DSAA, DS00DS, GS05DSAI_END, GS05DSAA_END);
+//----------------------------------------------------------------------------
+//GS07DS----------------------------------------------------------------------
+GS07DSAI : CECI, XSIZE = POS_CECI_07;
+GS07DSAA : CECA, XSIZE = POS_CECA_07;
+GS07DSAI_END : CECI, XSIZE = POS_CECI_07 - DX_CEC;
+GS07DSAA_END : CECA, XSIZE = POS_CECA_07 + DX_CEC;
+GS07DS : LINE = (GS07DSAI, GS07DSAA, DS00DS, GS07DSAI_END, GS07DSAA_END);
+//----------------------------------------------------------------------------
+//GS08DS----------------------------------------------------------------------
+GS08DSAI : CECI, XSIZE = POS_CECI_08;
+GS08DSAA : CECA, XSIZE = POS_CECA_08;
+GS08DSAI_END : CECI, XSIZE = POS_CECI_08 - DX_CEC;
+GS08DSAA_END : CECA, XSIZE = POS_CECA_08 + DX_CEC;
+GS08DS : LINE = (GS08DSAI, GS08DSAA, DS00DS, GS08DSAI_END, GS08DSAA_END);
+//----------------------------------------------------------------------------
+//GS09DS----------------------------------------------------------------------
+GS09DSAI : CECI, XSIZE = POS_CECI_09;
+GS09DSAA : CECA, XSIZE = POS_CECA_09;
+GS09DSAI_END : CECI, XSIZE = POS_CECI_09 - DX_CEC;
+GS09DSAA_END : CECA, XSIZE = POS_CECA_09 + DX_CEC;
+GS09DS : LINE = (GS09DSAI, GS09DSAA, DS00DS, GS09DSAI_END, GS09DSAA_END);
+//----------------------------------------------------------------------------
+//GS11DS----------------------------------------------------------------------
+GS11DSAI : CECI, XSIZE = POS_CECI_11;
+GS11DSAA : CECA, XSIZE = POS_CECA_11;
+GS11DSAI_END : CECI, XSIZE = POS_CECI_11 - DX_CEC;
+GS11DSAA_END : CECA, XSIZE = POS_CECA_11 + DX_CEC;
+GS11DS : LINE = (GS11DSAI, GS11DSAA, DS00DS, GS11DSAI_END, GS11DSAA_END);
+//----------------------------------------------------------------------------
+//GS12DS----------------------------------------------------------------------
+GS12DSAI : CECI, XSIZE = POS_CECI_12;
+GS12DSAA : CECA, XSIZE = POS_CECA_12;
+GS12DSAI_END : CECI, XSIZE = POS_CECI_12 - DX_CEC;
+GS12DSAA_END : CECA, XSIZE = POS_CECA_12 + DX_CEC;
+GS12DS : LINE = (GS12DSAI, GS12DSAA, DS00DS, GS12DSAI_END, GS12DSAA_END);
+//----------------------------------------------------------------------------
+//GS03DS3HI-------------------------------------------------------------------
+GS03DS3H:  CECI, XSIZE = POS_CECIH_03;
+GS03DS3H_END: CECI, XSIZE = POS_CECIH_03 - DX_CEC;
+GS03DS3HI: LINE = (GS03DS3H, DS00DS, GS03DS3H_END);
+//----------------------------------------------------------------------------
+//GS11DS3H--------------------------------------------------------------------
+GS11DS3H:  CECI, XSIZE = POS_CECIH_11;
+GS11DS3H_END: CECI, XSIZE = POS_CECIH_11 - DX_CEC;
+GS11DS3HI: LINE = (GS11DS3H, DS00DS, GS11DS3H_END);
+//----------------------------------------------------------------------------
+//GS12DS3HA-------------------------------------------------------------------
+GS12DS3HI:  CECI, XSIZE = POS_CECIH_12;
+GS12DS3HI_END:  CECI, XSIZE = POS_CECIH_12;
+GS12DS3HA:  CECA, XSIZE = POS_CECAH_12 + DX_CEC;
+GS12DS3HA_END: CECA, XSIZE = POS_CECIH_12 + DX_CEC;
+GS12DS3H: LINE = (GS12DS3HI, GS12DS3HA, DS00DS, GS12DS3HI_END, GS12DS3HA_END);
+//----------------------------------------------------------------------------------
+
+// define quadupole modules----------------------------------
+L_KS1C = 0.120; // length before the entrance of the sextupole in periode 1,3,5,7,9,11
+L_KS1C_QF = 0.100; // length between KS1C & QF
+L_KS3C_QF = 0.130; // length between KS1C & QF
+L_QD_KS3C = 0.195; // length between the QD & KS3C
+L_LQ_ADJUST = 0.075; // length before the entrance of the quadrupole (100mm -25 mm)  
+L_DK_BPM = 0.2165; // drift at the diagnostic chamber for BPM
+L_QT_BPM = L_KS3C_QF + L_DK_BPM; // drift between QS3T and BPM
+L_PERIODE_ADJUST = 0.254; // drift at the end of the periode
+D_KS1C: DRIFT, L = L_KS1C;
+D_KS3C_QF: DRIFT, L = L_KS3C_QF; 
+D_KS1C_QF: DRIFT, L = L_KS1C_QF;
+D_QD_KS3C: DRIFT, L = L_QD_KS3C;
+D_Q_ADJUST: DRIFT, L = L_LQ_ADJUST;
+D_QT_BPM: DRIFT, L = L_QT_BPM;
+D_PERIODE_ADJUST: DRIFT, L = L_PERIODE_ADJUST;
+
+//quadrupoles module for QF,KM2DV,QD-------------------------
+QFDM01: LINE = (M12970, D_Q_ADJUST, GS01QS1F,  GS00KM2DV, GS01QS2D);
+QFDM12: LINE = (M12970, D_Q_ADJUST, GS12QS1F,  GS00KM2DV, GS12QS2D);
+
+//quadrupoles modules for QS3T, BPM and the drift at the end of each periode
+QTBPMM: LINE = (GS00QS3T, D_QT_BPM, GS00DX5, M17785, D_PERIODE_ADJUST);
+
+//quadrupoles modules for periode 1,3,5,7,9,11---------------
+QFDTM01: LINE = (M12430, D_KS1C, GS00KS1C, D_KS1C_QF, QFDM01, D_QD_KS3C, 
+               GS00KS3C, D_QD_KS3C, QTBPMM);
+
+//quadrupoles modules for periode 4 & 10--------------------------
+QFDTM4 :  LINE = (QFDM12, D_QDMP, GS04KM_M, D_QDMP,  QTBPMM);
+QFDTM10 : LINE = (QFDM12, D_QDMP, GS10KM_M, D_QDMP,  QTBPMM);
+
+//quadrupoles modules for periode 6 and 12--------------------------
+QFDTM6 :  LINE = (QFDM12, D_QDMP, GS06KM_M, D_QDMP,  QTBPMM);
+QFDTM12 : LINE = (QFDM12, D_QDMP, GS12KM_M, D_QDMP,  QTBPMM);
+
+//quadrupoles modules for periode 2,8------------------------
+L_KQ1E = 0.105; // drift before the entrance of KQ1E
+L_KQ1E_QF12 = 0.085;// drift between KQ1E and QF12
+L_QD_MP = 0.180; // drift between QD and mutlipoles
+D_KQ1E: DRIFT, L = L_KQ1E;
+D_KQQF: DRIFT, L = L_KQ1E_QF12;
+D_QDMP: DRIFT, L = L_QD_MP;
+
+QDM2: LINE = (D_KQ1E, GS00KQ, D_KQQF, QFDM12, D_QDMP, GS02KM_M, D_QDMP,  QTBPMM);
+QDM8: LINE = (D_KQ1E, GS00KQ, D_KQQF, QFDM12, D_QDMP, GS08KM_M, D_QDMP,  QTBPMM);
+
+//test for ring
+//L_DPM_QDM = 5.739;
+//D_DP_QDM: DRIFT, L = L_DPM_QDM;
+//
+//SECTOR: LINE = (DPM, D_DP_QDM, QFDTM01);
+//RING: LINE = (SECTOR, SECTOR, SECTOR, SECTOR, SECTOR, SECTOR,
+//              SECTOR, SECTOR, SECTOR, SECTOR, SECTOR, SECTOR);
+//-----------------------------------------------------------
+//SECTOR1----------------------------------------------------
+L_DS_KM3  = 3.664;             // drift between GS01DS2 and GS01KM3QS
+L_KM3_BP3 = 0.635;             // drift between GS00KM3QS and vacuum chamber for S01MB3
+L_VC_BP3  = 0.110;             // drift vacuum chamber before S01MB3
+L_CH      = 0.470;             // diganose chamber
+L_BUMPER  = 0.400;             // length of the injection bumper
+KNL_GS00MB3 := 0.2281996622E-03;
+GS00MB3: TKICKER, L = L_BUMPER, HKICK = KNL_GS00MB3;
+D_DS_KM3:  DRIFT, L = L_DS_KM3;
+D_KM3_BP3: DRIFT, L = L_KM3_BP3;
+D_VC_BP3:  DRIFT, L = L_VC_BP3;
+D_CH:      DRIFT, L = L_CH;
+BUMPER : LINE = ( D_VC_BP3, GS00MB3, D_VC_BP3);
+STRAIGHT1 : LINE = (D_DC, GS01DS, D_DS_KM3, GS01KM_M, D_KM3_BP3,BUMPER, D_CH);
+SECTOR1: LINE = (BEGIN,DPM, STRAIGHT1, QFDTM01); 
+//-----------------------------------------------------------
+//SECTOR2----------------------------------------------------
+L_DS_BE1     = 0.533;          // drift between GS02DS2 and GS02BE1A
+L_BE1_ADJUST = 0.099;           // drift before and after GS02BE1A
+L_BE1_BB1    = 0.725;          // drift between GS02BE1A and GS02BB1
+L_BB1_KQ1E   = 0.265;          // drift between GS02BB1 and GS02KQ1E 
+L_BE1A       = 2.800;          // length of cavity GS02BE1A
+L_BB1        = 1.218;           // length of the Bunch compressor
+GS00BE1A     : RFCAVITY, L = L_BE1A, VOLT = 16000.0;
+GS02BE1A:     GS00BE1A;
+D_DS_BE1     : DRIFT ,   L = L_DS_BE1;
+D_BE1_ADJUST : DRIFT ,   L = L_BE1_ADJUST; 
+D_BE1_BB1    : DRIFT ,   L = L_BE1_BB1;    
+D_BB1_KQ1E   : DRIFT ,   L = L_BB1_KQ1E;
+D_BB1        : DRIFT ,   L = L_BB1;
+STRAIGHT2: LINE = (D_DC, GS02DS, D_DS_BE1, D_BE1_ADJUST, GS02BE1A, D_BE1_ADJUST, D_BE1_BB1, D_BB1, D_BB1_KQ1E);
+SECTOR2 : LINE = ( DPM, STRAIGHT2, QDM2);
+//-----------------------------------------------------------
+//SECTOR3----------------------------------------------------
+// IPM module in sector 3 -----------------------------------
+L_IPMCMHV2  = 0.790;   // eff. length of IPM corrector magnet (as multipole horz. and vert)
+L_IMPKH_KV = 0.698;   // eff. length of IPM diagnostic magnet
+
+K1_GS03IPMH1 := 0.0000;
+K1_GS03IPMV1 := 0.0000;
+IPMCMHV1 : KICKER, L = L_IPMCMHV2, HKICK = K1_GS03IPMH1, VKICK = K1_GS03IMPV1;
+
+K1_GS03IPMH2 = 0.0000;
+K1_GS03IPMV2 = 0.0000;
+IPMCMHV2 : KICKER, L = L_IPMCMHV2, HKICK = K1_GS03IPMH1, VKICK = K1_GS03IMPV1;
+
+K1_GS03IMPKH = 0.0000;
+K1_GS03IMPKV = 0.0000;
+IPMKH : KICKER, L = L_IMPKH_KV, HKICK = K1_GS03IMPKH; 
+IPMKV : KICKER, L = L_IMPKH_KV, VKICK = K1_GS03IMPKV; 
+
+IPM : LINE = (IPMCMHV1, IPMKH, IPMKH, IPMCMHV2);
+//-----------------------------------------------------------
+
+L_DS2_DS3H = 0.338;   // drift between GS03DS2 and GS03DS3H
+L_DS3H_IPM = 0.374;   // drift between GS03DS3H and IPM (eff. length of the corrector magnet)
+                      // length of IPM corrector magnet geometical is 0.416
+L_IPM_BP4  = 0.911;   // drift between IPM and GS03MB4
+D_DS2_DS3H: DRIFT, L = L_DS2_DS3H;
+D_DS3H_IPM: DRIFT, L = L_DS3H_IPM;
+D_IPM_BP4 : DRIFT, L = L_IPM_BP4;  
+
+STRAIGHT3 : LINE = (D_DC, GS03DS, D_DS2_DS3H, GS03DS3HI, D_DS3H_IPM, IPM, D_IPM_BP4, BUMPER, D_CH);
+SECTOR3   : LINE = (DPM, STRAIGHT3, QFDTM01); 
+//-----------------------------------------------------------
+//SECTOR4----------------------------------------------------
+//KICKER ----------------------------------------------------
+L_KICKER    = 0.340; // length of the Kicker
+K1_KICKER   = 0.000; 
+GS00MK.E. : KICKER, L = L_KICKER, HKICK := K1_KICKER;
+GS00MK.E.M4: LINE = (GS00MK.E., GS00MK.E., GS00MK.E., GS00MK.E., GS00MK.E.);
+//-----------------------------------------------------------
+//Electrostatic septum---------------------------------------
+L_DC_ME1 = 0.2935;   // drift from begin/end flange to Septum 
+D_DC_ME1: DRIFT, L = L_DC_ME1;
+L_ME1 = 1.500;      // length of the eclectrostatic septum
+ESEPTUM: ELSEPARATOR, L = L_ME1, EX = 0.055, TILT = 0.009;
+GS04ME1: LINE = (D_DC_ME1, ESEPTUM, D_DC_ME1);
+//--------------------------------------------------------------------------
+//Exiter--------------------------------------------------------------------
+L_DME1_TFX  = 0.0325;// drift between GS04ME1E and Exiter TFX and TFY and DC
+L_EXITER    = 0.740; // drift between TFX and TFY
+K1_GS04_TFX = 0.0000;
+K1_GS04_TFY = 0.0000;
+GS04_TFX: MULTIPOLE, KNL := {K1_GS04_TFX, 0, 0};
+GS04_TFY: MULTIPOLE, KSL := {K1_GS04_TFX, 0, 0};
+D_DME1_TFX : DRIFT, L = L_DME1_TFX; 
+D_EXITER   : DRIFT, L = L_EXITER;
+EXITER: LINE = (D_DME1_TFX, GS04_TFX, D_EXITER, GS04_TFY, D_DME1_TFX);
+//-----------------------------------------------------------------------------
+L_DS2_MK1E1 = 0.954; // drift between GS04DS2 and first Kicker
+L_DKICK_ME1 = 0.334; // drift between last Kicker in Sector 4 and electrostatic setpum
+L_ME1_EXITER= 0.204; // drift between Elec. Septum and Exiter
+L_EXITER_QF = 0.195; // drift between Exiter and QF12
+D_DS2_MK1E1: DRIFT, L = L_DS2_MK1E1;
+D_DKICK_ME1: DRIFT, L = L_DKICK_ME1;              
+D_ME1_EXITER:DRIFT, L = L_ME1_EXITER;
+D_EXITER_QF: DRIFT, L = L_EXITER_QF;
+STRAIGHT4: LINE = (D_DC, GS04DS, D_DS2_MK1E1, GS00MK.E.M4, D_DKICK_ME1,
+                   GS04ME1, D_ME1_EXITER, EXITER, D_EXITER_QF);
+SECTOR4: LINE = (DPM, STRAIGHT4, QFDTM4);
+//-----------------------------------------------------------------------------------
+//SECTOR5----------------------------------------------------------------------------
+L_DS2_MQ1 = 2.315;  // drift between GS002DS2 and GS05MQ1
+D_DS2_MQ1 : DRIFT, L = L_DS2_MQ1; 
+//KICKER for tune measurement----------------------------------------------------------
+GS00MK.E.M5: LINE = (GS00MK.E., GS00MK.E., GS00MK.E., GS00MK.E.);
+L_GS05MQ1 = 0.924;
+K1_GS05MQ1H := 0.0000;
+K1_GS05MQ1V := 0.0000;
+
+GS05MQ1 : KICKER, L = L_GS05MQ1, HKICK := K1_GS05MQ1H, VKICK := K1_GS05MQ1V;
+
+L_MQ1_MK2E1 = 0.520; // drift between GS05MQ1 and first Kicker in sector 5
+L_DKICK_DCH = 0.150; // drift between last kicker in sector 5 and Diagnostic chamber
+D_MQ1_MK2E1 : DRIFT, L = L_MQ1_MK2E1;
+D_DKICK_DCH : DRIFT, L = L_DKICK_DCH;
+
+STRAIGHT5: LINE = (D_DC, GS05DS, D_DS2_MQ1, GS05MQ1, D_MQ1_MK2E1, GS00MK.E.M5, D_DKICK_DCH, D_CH);
+SECTOR5 : LINE = (DPM, STRAIGHT5, QFDTM01);
+//-----------------------------------------------------------------------------------
+//SECTOR6----------------------------------------------------------------------------
+L_DP_MU3E = 0.498;  // drift between GS06MU22 and GS06MU3E
+L_MU3E    = 1.000;  // length of magnetic septum for extraction
+L_MU3E_PSE= 2.020;  // drift between magentic septum and PSE point
+L_PSE_QF  = 3.021;  // drift between PSE-point and QS1F
+
+GS06MU3E  : RCOLLIMATOR, L = L_MU3E, XSIZE = 0.0391;
+D_DP_MU3E : DRIFT,       L = L_DP_MU3E;
+D_MU3E_PSE: DRIFT,       L = L_MU3E_PSE;
+D_PSE_QF  : DRIFT,       L = L_PSE_QF;
+
+STRAIGHT6: LINE = (D_DP_MU3E, GS06MU3E, D_MU3E_PSE, PSE, D_PSE_QF);
+SECTOR6: LINE = (DPM, STRAIGHT6, QFDTM6);
+//-----------------------------------------------------------------------------------
+//SECTOR7----------------------------------------------------------------------------
+L_DS2_BE3 = 0.376; // drift between GS07DS2 and GS07BE3E
+L_GS07BE3 = 1.340; // length of the cavity GS07BE3
+L_BE5_QS  = 0.201; // drift between cavity GS07BE5 and GS07KM3QS
+L_GS07KM3QS_DCH = 0.322; // drift between GS07KM3QS and diagnostic chamber
+GS07BE3: RFCAVITY, L = L_GS07BE3, VOLT = 0.00000;
+D_GS07BE3: DRIFT,  L = L_GS07BE3;
+D_DS2_BE3: DRIFT,  L = L_DS2_BE3;
+D_BE5_QS: DRIFT,   L = L_BE5_QS;
+D_GS07KM3QS_DCH: DRIFT, L = L_GS07KM3QS_DCH;
+
+STRAIGHT7: LINE = (D_DC, GS07DS, D_DS2_BE3, GS07BE3, D_GS07BE3, D_GS07BE3,
+                   D_BE5_QS, GS07KM_M, D_GS07KM3QS_DCH, D_CH); 
+SECTOR7: LINE = ( DPM, STRAIGHT7, QFDTM01);
+//------------------------------------------------------------------------------------
+//SECTOR8-----------------------------------------------------------------------------
+L_BE2_KQ1E = L_BB1 + L_BB1_KQ1E + L_BE1_BB1;
+D_BE2_KQ1E: DRIFT, L = L_BE2_KQ1E;
+GS08BE1A:     GS00BE1A;
+
+STRAIGHT8: LINE = (D_DC, GS08DS, D_DS_BE1, D_BE1_ADJUST, GS08BE1A, D_BE1_ADJUST, D_BE2_KQ1E);
+SECTOR8: LINE = (DPM, STRAIGHT8, QDM8);
+//------------------------------------------------------------------------------------
+//SECTOR9-----------------------------------------------------------------------------
+L_DS2_DRAH = 0.450; //drift between GS02DS2 and GS09DRAH
+L_GS09DR   = 0.790; //length the RGM  
+L_RAH_RBV  = 0.186; // drift between RGM horz. and vert.
+L_RBV_DTS  = 1.668; // drift between RGM vert. and Transformer
+L_DTS      = 0.600; // length of the current transformer
+L_DTS_KS1C = 1.255; // drift between transformer and GS09KS1C
+
+GS09DRAH: HMONITOR, L = L_GS09DR;
+GS09DRBV: VMONITOR, L = L_GS09DR;
+
+D_DS2_DRAH: DRIFT, L = L_DS2_DRAH; 
+D_RAH_RBV : DRIFT, L = L_RAH_RBV;     
+D_RBV_DTS : DRIFT, L = L_RBV_DTS;  
+D_DTS     : DRIFT, L = L_DTS;      
+D_DTS_KS1C: DRIFT, L = L_DTS_KS1C;
+
+STRAIGHT9: LINE = (D_DC, GS09DS, D_DS2_DRAH, GS09DRAH, D_RAH_RBV, GS09DRBV, D_RBV_DTS, D_DTS, D_DTS_KS1C);
+SECTOR9: LINE = (DPM, STRAIGHT9, QFDTM01);
+//------------------------------------------------------------------------------------
+//SECTOR10----------------------------------------------------------------------------
+L_DP_KX1 = 0.2543; // drift between dipole and GS10KX1
+L_KX1_KX2= 6.0947; // drift between GS10KX1 and GS10KX2
+L_KX2_QF1= 0.1900; // drift between GS10KX2 and GS10QF12
+D_DP_KX1: DRIFT, L = L_DP_KX1; 
+D_KX1_KX2:DRIFT, L = L_KX1_KX2;                       
+D_KX2_QF1:DRIFT, L = L_KX2_QF1;
+//define KX1 and KX2 horizontal kicker for electron cooler-----------------------------
+K1_GS10KX1 = 0.0000;
+K1_GS10KX2 = 0.0000;
+GS10KX1: MULTIPOLE, KNL := {K1_GS10KX1,0,0};
+GS10KX2: MULTIPOLE, KNL := {K1_GS10KX2,0,0};
+//------------------------------------------------------------------------------------
+STRAIGHT10: LINE = (D_DP_KX1, GS10KX1, D_KX1_KX2, D_KX2_QF1);
+SECTOR10: LINE = (DPM, STRAIGHT10, QFDTM10);
+//------------------------------------------------------------------------------------
+//SECTOR11----------------------------------------------------------------------------
+L_DS2_GS11DS3H = 4.401;     // drift between GS11DS2 and GS11DS3H
+L_GS11DS3H_GS11MB1 = 0.571; // drift between GS11DS3H and GS11MB1
+L_GS11MB1_KS1C = 0.097;     // drift between GS11MB1 and GS11KS1C
+
+D_DS2_GS11DS3H:     DRIFT, L = L_DS2_GS11DS3H;
+D_GS11DS3H_GS11MB1: DRIFT, L = L_GS11DS3H_GS11MB1;
+D_GS11MB1_KS1C:     DRIFT, L = L_GS11MB1_KS1C;
+
+STRAIGHT11: LINE = (D_DC, GS11DS, D_DS2_GS11DS3H, GS11DS3HI, D_GS11DS3H_GS11MB1, BUMPER, D_GS11MB1_KS1C);
+SECTOR11: LINE = (DPM, STRAIGHT11, QFDTM01);
+//------------------------------------------------------------------------------------
+//SECTOR12----------------------------------------------------------------------------;
+L_GS12MB1_GS12DS3HA = 0.927; // drift between GS12MB2 and GS12DSHA
+L_GS12DS3HA_PSI = 1.972;     // drift between GS12DSHA and PSI
+L_PSI_GS12ME1II= 0.712;     // drift between PSI and GS12ME1II
+L_GS12ME1II_QF = 0.288;     // drift between GS12ME1II and QF
+                               
+D_GS12MB1_GS12DS3HA: DRIFT, L = L_GS12MB1_GS12DS3HA;
+D_GS12DS3HA_PSI: DRIFT,     L = L_GS12DS3HA_PSI;    
+D_PSI_GS12ME1II:DRIFT,     L = L_PSI_GS12ME1II;   
+D_GS12ME1II_QF: DRIFT,     L = L_GS12ME1II_QF;    
+L_GS12ME1II = 1.500;       // length of the electorstatic septum at injection
+GS12ME1II  : ELSEPARATOR, L = L_GS12ME1II, EX = 0.070, TILT = 0.0049999;
+
+STRAIGHT12: LINE = (D_DC, GS12DS, D_DC, BUMPER, D_GS12MB1_GS12DS3HA, GS12DS3H,
+                    D_GS12DS3HA_PSI, PSI, D_PSI_GS12ME1II, GS12ME1II, D_GS12ME1II_QF);
+
+SECTOR12: LINE = (DPM, STRAIGHT12, QFDTM12,END); 
+//--------------------------------------------------------------------------------------
+// define RING 12 sectors---------------------------------------------------------------
+
+RING: LINE = (SECTOR1, SECTOR2, SECTOR3, SECTOR4, SECTOR5, SECTOR6,
+              SECTOR7, SECTOR8, SECTOR9, SECTOR10, SECTOR11, SECTOR12);
+//--------------------------------------------------------------------------------------
