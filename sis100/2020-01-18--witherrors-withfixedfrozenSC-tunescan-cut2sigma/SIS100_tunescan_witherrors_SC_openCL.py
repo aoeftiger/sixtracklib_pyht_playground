@@ -2,13 +2,14 @@
 # coding: utf-8
 
 import sys
-assert len(sys.argv) == 1 + 3, (
-    'Require 3 arguments: sixtracklib_device '
-    '(e.g. opencl:1.0 or cpu), qx, qy')
+assert len(sys.argv) == 1 + 4, (
+    'Require 4 arguments: sixtracklib_device '
+    '(e.g. opencl:1.0 or cpu), qx, qy, e_seed')
 
-gpu_device_id, qx, qy = sys.argv[1:]
+gpu_device_id, qx, qy, e_seed = sys.argv[1:]
 qx = float(qx)
 qy = float(qy)
+e_seed = int(e_seed)
 
 # In[1]:
 
@@ -65,8 +66,10 @@ nmass = 0.931494061 # MAD-X value
 # In[7]:
 
 
-tune_range_qx = np.arange(18.55, 18.95 + 0.01, 0.01)
-tune_range_qy = tune_range_qx
+#tune_range_qx = np.arange(18.55, 18.95 + 0.01, 0.01)
+#tune_range_qy = tune_range_qx
+#e_seed = 3
+
 
 with_errors = True
 with_SC = True
@@ -95,7 +98,7 @@ class Runner(object):
     intensity = 0.625e11
     n_scnodes = 500
 
-    def __init__(self, nturns=20000, npart=1000, e_seed=1):
+    def __init__(self, nturns=20000, npart=1000, e_seed=e_seed):
         if not os.path.exists('results'):
             os.makedirs('results')
         if with_errors and not os.path.exists('error_tables'):
@@ -154,7 +157,7 @@ class Runner(object):
             return
 
         print ('\n\n\n=== Preparing for Qx = {:.2f} and '
-               'Qy = {:.2f} ===\n\n\n'.format(qx, qy))
+               'Qy = {:.2f} and e_seed = {:d} ===\n\n\n'.format(qx, qy, self.e_seed))
 
         ### SETUP
         twiss = self.setup_madx(self.madx, filename_error_table, with_errors)
@@ -166,7 +169,7 @@ class Runner(object):
         print ('\n\n\n' + '+'*26 + '\n*** ready for tracking ***\n' +
                '+'*26 + '\n')
         print ('\n\n\n=== Running at Qx = {:.2f} and '
-               'Qy = {:.2f} ===\n\n\n'.format(qx, qy))
+               'Qy = {:.2f} and e_seed = {:d} ===\n\n\n'.format(qx, qy, self.e_seed))
 
         if fake:
             trackjob.track_until(0)
@@ -202,7 +205,7 @@ class Runner(object):
         )
 
         if with_errors:
-            madx.command.eoption(add=True, seed=1)
+            madx.command.eoption(add=True, seed=self.e_seed)
             madx.command.exec('EA_EFCOMP_MH()')
             for s in range(1, 10):
                 assert madx.command.exec(f'EA_rEFCOMP_QD({s},1)')
