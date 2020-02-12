@@ -1,0 +1,435 @@
+!!!MACHINE PARAMETERS
+circumf			=	1083.6	;			//Accelerator circumference	[m]
+LQD				=	1.3		;
+thin_slices		=	9		;	
+
+!K0L of the main dipoles:
+k0l_MH=-0.05817764173;
+
+!!! BEAM PARAMETERS
+z_particle_true	=	28		;
+charge_proj	= 28			;			//Charge
+A_proj		= 238			;			//Mass number (A(Uran)=238.02891*nmass)
+mass_proj	= A_proj*nmass	;			//Projectile mass [GeV]
+
+energy_kin = 0.2			;			//Kinetic energy [GeV/u]
+
+epsx_rms_fin = 35e-6/4		;			//Geometrical emittance at given energy and at 1-sigma (multiplied by factor 1.5 to get rms 8.75e-6 and 3.75e-6 of tgauss2.5)
+epsy_rms_fin = 15e-6/4		; 
+
+epsx_gauss	 =	epsx_rms_fin * 1.778	;
+epsy_gauss	 =	epsy_rms_fin * 1.82		;
+
+bunch_length	= 58/4		;			//Bunch length at 1-sigma [m]
+
+!!!RF-CAVITY
+phi_s			=	0		;			//Phase-shirt [rad]
+harmonic_number	=	10		;			//
+filled_buckets	=	8		;
+number_cavities =	14		;
+
+cavity_voltage:=0;		//[MV] for twiss calculations
+
+!cavity_voltage1 := (delta_rms/phi_rms)^2*twopi*betaRel^2*energy_tot*1e9*harmonic_number*abs(eta)/(charge_proj*cos(phi_s))/1e6/number_cavities;		//[MV] for tracking, to be used in respective section
+
+!!!SPACE CHARGE PARAMETERS !!!!!!!!!!!!!!!!!!!!
+numb_spch_kicks	=	500	;
+
+! Laslett bunching factor
+B_bunching:=0.0335;
+
+!!!DERIVED PARAMETERS
+energy_tot	=	energy_kin*A_proj+mass_proj					;
+gammaRel	=	1+energy_kin*A_proj/mass_proj				;
+betaRel		=	sqrt(1.0-1.0/gammaRel^2)					;
+
+f_rev		=	(betaRel*clight)/circumf					;
+
+phi_rms		=	twopi*harmonic_number*bunch_length/circumf	;	//Bunch length in [rad]
+delta_rms	=	0.5e-3										;
+deltap_max	=	3*delta_rms									;
+
+ct_rms	=	bunch_length/betaRel	;
+pt_rms	=	delta_rms*betaRel		;
+
+ct_gauss	=	ct_rms*1.22			;
+pt_gauss	=	pt_rms*1.22			;
+
+
+N_particles:=5.0e11/8*circumf/Bunch_length/sqrt(twopi); !!!! CERN-ACC-NOTE-2013-0036
+
+N_particles_Laslett = 0.625e11	;
+
+
+///////////////////////////////////////////////////////////////////////////////////
+//
+//	U28+ Fast extraction  (Q1=18.84, Q2=18.73)
+//
+//	All multipoles are OFF
+//
+//	
+///////////////////////////////////////////////////////////////////////////////////
+
+
+/*	Injection and Extraction kickers  */
+
+K0NL_IPMCOR1H	:=	0	;
+K0SL_IPMCOR1V	:=	0	;
+K0NL_IPMCOR2H	:=	0	;
+K0SL_IPMCOR2V	:=	0	;
+
+K0NL_IPMKH		:=	0	;
+K0SL_IPMKV		:=	0	;
+
+K0NL_IK			:=	0	;
+
+k0sl_MPE			:=	0;
+K0SL_S54MP1E	:=	k0sl_MPE	;
+K0SL_S54MP2E	:=	k0sl_MPE	;
+K0SL_S54MP3E	:=	k0sl_MPE	;
+
+k0sl_MKE1		:= 0	;
+K0SL_S51MK1E	:=	k0sl_MKE1	;
+K0SL_S52MK1E	:=	k0sl_MKE1	;
+K0SL_S53MK1E	:=	k0sl_MKE1	;
+
+k0sl_MKE2		:= 0	;
+K0SL_S51MK2E	:=	k0sl_MKE2	;
+K0SL_S52MK2E	:=	k0sl_MKE2	;
+K0SL_S53MK2E	:=	k0sl_MKE2	;
+
+k0sl_MKE3		:= 0	;
+K0SL_S51MK3E	:=	k0sl_MKE3	;
+K0SL_S53MK3E	:=	k0sl_MKE3	;
+
+k0sl_MPL		:= 0	;
+K0SL_S53MP1L	:=	k0sl_MPL	;
+
+k0nl_LPKDE	:=	0	;
+
+K0NL_S52LP1	:=	k0nl_LPKDE	;
+K0NL_S52LP2	:=	k0nl_LPKDE	;
+
+/* Quadrupole coefficients */
+
+kqd : = -2.158585731120552e-01	*	LQD	;
+kqf : = 2.165932886180960e-01	*	LQD	;
+
+K1NL_S00QD1D	:=	kqd	;		
+K1NL_S00QD1F	:=	kqf	;		
+K1NL_S00QD2F	:=	kqf	;		
+K1NL_S52QD11	:=	1.0139780	*	kqd	;			//=0.748961*kqd*L52QD/LQD	;	//
+K1NL_S52QD12	:=	1.0384325	*	kqf	;			//=0.767024*kqf*L52QD/LQD	;	//
+
+
+K1NL_S14KM1Q	:=	0	;
+K1NL_S1EKM1Q	:=	0	;
+K1NL_S24KM1Q	:=	0	;
+K1NL_S2EKM1Q	:=	0	;
+K1NL_S34KM1Q	:=	0	;
+K1NL_S3EKM1Q	:=	0	;
+K1NL_S44KM1Q	:=	0	;
+K1NL_S4EKM1Q	:=	0	;
+K1NL_S54KM1Q	:=	0	;
+K1NL_S5EKM1Q	:=	0	;
+K1NL_S64KM1Q	:=	0	;
+K1NL_S6EKM1Q	:=	0	;
+
+K0NL_S11KH1	:=	0	;
+K0NL_S12KH1	:=	0	;
+K0NL_S13KH1	:=	0	;
+K0NL_S14KH1	:=	0	;
+K0NL_S15KH1	:=	0	;
+K0NL_S16KH1	:=	0	;
+K0NL_S17KH1	:=	0	;
+K0NL_S18KH1	:=	0	;
+K0NL_S19KH1	:=	0	;
+K0NL_S1AKH1	:=	0	;
+K0NL_S1BKH1	:=	0	;
+K0NL_S1CKH1	:=	0	;
+K0NL_S1DKH1	:=	0	;
+K0NL_S1EKH1	:=	0	;
+K0NL_S21KH1	:=	0	;
+K0NL_S22KH1	:=	0	;
+K0NL_S23KH1	:=	0	;
+K0NL_S24KH1	:=	0	;
+K0NL_S25KH1	:=	0	;
+K0NL_S26KH1	:=	0	;
+K0NL_S27KH1	:=	0	;
+K0NL_S28KH1	:=	0	;
+K0NL_S29KH1	:=	0	;
+K0NL_S2AKH1	:=	0	;
+K0NL_S2BKH1	:=	0	;
+K0NL_S2CKH1	:=	0	;
+K0NL_S2DKH1	:=	0	;
+K0NL_S2EKH1	:=	0	;
+K0NL_S31KH1	:=	0	;
+K0NL_S32KH1	:=	0	;
+K0NL_S33KH1	:=	0	;
+K0NL_S34KH1	:=	0	;
+K0NL_S35KH1	:=	0	;
+K0NL_S36KH1	:=	0	;
+K0NL_S37KH1	:=	0	;
+K0NL_S38KH1	:=	0	;
+K0NL_S39KH1	:=	0	;
+K0NL_S3AKH1	:=	0	;
+K0NL_S3BKH1	:=	0	;
+K0NL_S3CKH1	:=	0	;
+K0NL_S3DKH1	:=	0	;
+K0NL_S3EKH1	:=	0	;
+K0NL_S41KH1	:=	0	;
+K0NL_S42KH1	:=	0	;
+K0NL_S43KH1	:=	0	;
+K0NL_S44KH1	:=	0	;
+K0NL_S45KH1	:=	0	;
+K0NL_S46KH1	:=	0	;
+K0NL_S47KH1	:=	0	;
+K0NL_S48KH1	:=	0	;
+K0NL_S49KH1	:=	0	;
+K0NL_S4AKH1	:=	0	;
+K0NL_S4BKH1	:=	0	;
+K0NL_S4CKH1	:=	0	;
+K0NL_S4DKH1	:=	0	;
+K0NL_S4EKH1	:=	0	;
+K0NL_S51KH1	:=	0	;
+K0NL_S53KH1	:=	0	;
+K0NL_S54KH1	:=	0	;
+K0NL_S55KH1	:=	0	;
+K0NL_S56KH1	:=	0	;
+K0NL_S57KH1	:=	0	;
+K0NL_S58KH1	:=	0	;
+K0NL_S59KH1	:=	0	;
+K0NL_S5AKH1	:=	0	;
+K0NL_S5BKH1	:=	0	;
+K0NL_S5CKH1	:=	0	;
+K0NL_S5DKH1	:=	0	;
+K0NL_S5EKH1	:=	0	;
+K0NL_S61KH1	:=	0	;
+K0NL_S62KH1	:=	0	;
+K0NL_S63KH1	:=	0	;
+K0NL_S64KH1	:=	0	;
+K0NL_S65KH1	:=	0	;
+K0NL_S66KH1	:=	0	;
+K0NL_S67KH1	:=	0	;
+K0NL_S68KH1	:=	0	;
+K0NL_S69KH1	:=	0	;
+K0NL_S6AKH1	:=	0	;
+K0NL_S6BKH1	:=	0	;
+K0NL_S6CKH1	:=	0	;
+K0NL_S6DKH1	:=	0	;
+K0NL_S6EKH1	:=	0	;
+
+K0SL_S11KV1	:=	0	;
+K0SL_S12KV1	:=	0	;
+K0SL_S13KV1	:=	0	;
+K0SL_S14KV1	:=	0	;
+K0SL_S15KV1	:=	0	;
+K0SL_S16KV1	:=	0	;
+K0SL_S17KV1	:=	0	;
+K0SL_S18KV1	:=	0	;
+K0SL_S19KV1	:=	0	;
+K0SL_S1AKV1	:=	0	;
+K0SL_S1BKV1	:=	0	;
+K0SL_S1CKV1	:=	0	;
+K0SL_S1DKV1	:=	0	;
+K0SL_S1EKV1	:=	0	;
+K0SL_S21KV1	:=	0	;
+K0SL_S22KV1	:=	0	;
+K0SL_S23KV1	:=	0	;
+K0SL_S24KV1	:=	0	;
+K0SL_S25KV1	:=	0	;
+K0SL_S26KV1	:=	0	;
+K0SL_S27KV1	:=	0	;
+K0SL_S28KV1	:=	0	;
+K0SL_S29KV1	:=	0	;
+K0SL_S2AKV1	:=	0	;
+K0SL_S2BKV1	:=	0	;
+K0SL_S2CKV1	:=	0	;
+K0SL_S2DKV1	:=	0	;
+K0SL_S2EKV1	:=	0	;
+K0SL_S31KV1	:=	0	;
+K0SL_S32KV1	:=	0	;
+K0SL_S33KV1	:=	0	;
+K0SL_S34KV1	:=	0	;
+K0SL_S35KV1	:=	0	;
+K0SL_S36KV1	:=	0	;
+K0SL_S37KV1	:=	0	;
+K0SL_S38KV1	:=	0	;
+K0SL_S39KV1	:=	0	;
+K0SL_S3AKV1	:=	0	;
+K0SL_S3BKV1	:=	0	;
+K0SL_S3CKV1	:=	0	;
+K0SL_S3DKV1	:=	0	;
+K0SL_S3EKV1	:=	0	;
+K0SL_S41KV1	:=	0	;
+K0SL_S42KV1	:=	0	;
+K0SL_S43KV1	:=	0	;
+K0SL_S44KV1	:=	0	;
+K0SL_S45KV1	:=	0	;
+K0SL_S46KV1	:=	0	;
+K0SL_S47KV1	:=	0	;
+K0SL_S48KV1	:=	0	;
+K0SL_S49KV1	:=	0	;
+K0SL_S4AKV1	:=	0	;
+K0SL_S4BKV1	:=	0	;
+K0SL_S4CKV1	:=	0	;
+K0SL_S4DKV1	:=	0	;
+K0SL_S4EKV1	:=	0	;
+K0SL_S51KV1	:=	0	;
+K0SL_S53KV1	:=	0	;
+K0SL_S54KV1	:=	0	;
+K0SL_S55KV1	:=	0	;
+K0SL_S56KV1	:=	0	;
+K0SL_S57KV1	:=	0	;
+K0SL_S58KV1	:=	0	;
+K0SL_S59KV1	:=	0	;
+K0SL_S5AKV1	:=	0	;
+K0SL_S5BKV1	:=	0	;
+K0SL_S5CKV1	:=	0	;
+K0SL_S5DKV1	:=	0	;
+K0SL_S5EKV1	:=	0	;
+K0SL_S61KV1	:=	0	;
+K0SL_S62KV1	:=	0	;
+K0SL_S63KV1	:=	0	;
+K0SL_S64KV1	:=	0	;
+K0SL_S65KV1	:=	0	;
+K0SL_S66KV1	:=	0	;
+K0SL_S67KV1	:=	0	;
+K0SL_S68KV1	:=	0	;
+K0SL_S69KV1	:=	0	;
+K0SL_S6AKV1	:=	0	;
+K0SL_S6BKV1	:=	0	;
+K0SL_S6CKV1	:=	0	;
+K0SL_S6DKV1	:=	0	;
+K0SL_S6EKV1	:=	0	;
+
+k1nl_QJ1	:=	0	;
+K1NL_S19QS1J	:=	k1nl_QJ1	;
+K1NL_S1DQS1J	:=	-k1nl_QJ1	;
+
+k1nl_QJ2	:=	0	;
+K1NL_S29QS1J	:=	k1nl_QJ2	;
+K1NL_S2DQS1J	:=	-k1nl_QJ2	;
+
+k1nl_QJ3	:=	0	;
+K1NL_S39QS1J	:=	k1nl_QJ3	;
+K1NL_S3DQS1J	:=	-k1nl_QJ3	;
+
+k1nl_QJ4	:=	0	;
+K1NL_S49QS1J	:=	k1nl_QJ4	;
+K1NL_S4DQS1J	:=	-k1nl_QJ4	;
+
+k1nl_QJ5	:=	0	;
+K1NL_S59QS1J	:=	k1nl_QJ5	;
+K1NL_S5DQS1J	:=	-k1nl_QJ5	;
+
+k1nl_QJ6	:=	0	;
+K1NL_S69QS1J	:=	k1nl_QJ6	;
+K1NL_S6DQS1J	:=	-k1nl_QJ6	;
+
+/* Sextupole coefficients */
+
+/*
+k2sl_KSS	:=	0	;
+
+K2SL_S14KMLS	:=	k2sl_KSS	;
+K2SL_S1EKMLS	:=	k2sl_KSS	;
+K2SL_S24KMLS	:=	k2sl_KSS	;
+K2SL_S2EKMLS	:=	k2sl_KSS	;
+K2SL_S34KMLS	:=	k2sl_KSS	;
+K2SL_S3EKMLS	:=	k2sl_KSS	;
+K2SL_S44KMLS	:=	k2sl_KSS	;
+K2SL_S4EKMLS	:=	k2sl_KSS	;
+K2SL_S54KMLS	:=	k2sl_KSS	;
+K2SL_S5EKMLS	:=	k2sl_KSS	;
+K2SL_S64KMLS	:=	k2sl_KSS	;
+*/
+
+!!Extraction sextupoles
+
+k2nl_KSE	:=	0	;
+
+K2NL_S14KS1E	:=	k2nl_KSE	;
+K2NL_S24KS1E	:=	k2nl_KSE	;
+K2NL_S34KS1E	:=	k2nl_KSE	;
+K2NL_S44KS1E	:=	k2nl_KSE	;
+K2NL_S54KS1E	:=	k2nl_KSE	;
+K2NL_S64KS1E	:=	k2nl_KSE	;
+
+!!Chromaticity correction
+
+k2nl_KSCH	:=	0				;
+k2nl_KSCV	:=	0				;
+
+K2NL_S16KS1CH	:=	k2nl_KSCH	;
+K2NL_S26KS1CH	:=	k2nl_KSCH	;
+K2NL_S36KS1CH	:=	k2nl_KSCH	;
+K2NL_S46KS1CH	:=	k2nl_KSCH	;
+K2NL_S56KS1CH	:=	k2nl_KSCH	;
+K2NL_S66KS1CH	:=	k2nl_KSCH	;
+
+
+K2NL_S18KS1CH	:=	k2nl_KSCH	;
+K2NL_S28KS1CH	:=	k2nl_KSCH	;
+K2NL_S38KS1CH	:=	k2nl_KSCH	;
+K2NL_S48KS1CH	:=	k2nl_KSCH	;
+K2NL_S58KS1CH	:=	k2nl_KSCH	;
+K2NL_S68KS1CH	:=	k2nl_KSCH	;
+
+
+K2NL_S1AKS1CH	:=	k2nl_KSCH	;
+K2NL_S2AKS1CH	:=	k2nl_KSCH	;
+K2NL_S3AKS1CH	:=	k2nl_KSCH	;
+K2NL_S4AKS1CH	:=	k2nl_KSCH	;
+K2NL_S5AKS1CH	:=	k2nl_KSCH	;
+K2NL_S6AKS1CH	:=	k2nl_KSCH	;
+
+
+K2NL_S1CKS1CH	:=	k2nl_KSCH	;
+K2NL_S2CKS1CH	:=	k2nl_KSCH	;
+K2NL_S3CKS1CH	:=	k2nl_KSCH	;
+K2NL_S4CKS1CH	:=	k2nl_KSCH	;
+K2NL_S5CKS1CH	:=	k2nl_KSCH	;
+K2NL_S6CKS1CH	:=	k2nl_KSCH	;
+
+
+K2NL_S15KS1CV	:=	k2nl_KSCV	;
+K2NL_S25KS1CV	:=	k2nl_KSCV	;
+K2NL_S35KS1CV	:=	k2nl_KSCV	;
+K2NL_S45KS1CV	:=	k2nl_KSCV	;
+K2NL_S55KS1CV	:=	k2nl_KSCV	;
+K2NL_S65KS1CV	:=	k2nl_KSCV	;
+
+
+K2NL_S17KS1CV	:=	k2nl_KSCV	;
+K2NL_S27KS1CV	:=	k2nl_KSCV	;
+K2NL_S37KS1CV	:=	k2nl_KSCV	;
+K2NL_S47KS1CV	:=	k2nl_KSCV	;
+K2NL_S57KS1CV	:=	k2nl_KSCV	;
+K2NL_S67KS1CV	:=	k2nl_KSCV	;
+
+
+K2NL_S1BKS1CV	:=	k2nl_KSCV	;
+K2NL_S2BKS1CV	:=	k2nl_KSCV	;
+K2NL_S3BKS1CV	:=	k2nl_KSCV	;
+K2NL_S4BKS1CV	:=	k2nl_KSCV	;
+K2NL_S5BKS1CV	:=	k2nl_KSCV	;
+K2NL_S6BKS1CV	:=	k2nl_KSCV	;
+
+
+/* Octupole coefficients */
+
+K3NL_S14KM1O	:=	0	;
+K3NL_S1EKM1O	:=	0	;
+K3NL_S24KM1O	:=	0	;
+K3NL_S2EKM1O	:=	0	;
+K3NL_S34KM1O	:=	0	;
+K3NL_S3EKM1O	:=	0	;
+K3NL_S44KM1O	:=	0	;
+K3NL_S4EKM1O	:=	0	;
+K3NL_S54KM1O	:=	0	;
+K3NL_S5EKM1O	:=	0	;
+K3NL_S64KM1O	:=	0	;
+K3NL_S6EKM1O	:=	0	;
+
+
