@@ -1,0 +1,509 @@
+option, -echo,info,warn;
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!		SHIFTING COLLIMATORS TO REAL OFFSETS
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+coll-cryocat: macro = {
+
+select, flag = error, clear;
+!eoption, add=false;
+
+select, flag = error, pattern = "S11UHAI";
+ealign, arex :=  -0.0365, arey :=-0.0435;
+select, flag = error, clear;
+select, flag = error, pattern = "S11HCB1S";
+ealign, arex :=  -0.037, arey :=-0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S12HCSB2S";
+ealign, arex :=  -0.037, arey :=-0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S15DS1_en";
+select, flag = error, pattern = "S15DS1_body";
+select, flag = error, pattern = "S15DS1_ex";
+ealign, arex :=  0.04075, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S16DS1_en";
+select, flag = error, pattern = "S16DS1_body";
+select, flag = error, pattern = "S16DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S17DS1_en";
+select, flag = error, pattern = "S17DS1_body";
+select, flag = error, pattern = "S17DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S18DS1_en";
+select, flag = error, pattern = "S18DS1_body";
+select, flag = error, pattern = "S18DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S19DS1_en";
+select, flag = error, pattern = "S19DS1_body";
+select, flag = error, pattern = "S19DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S1ADS1_en";
+select, flag = error, pattern = "S1ADS1_body";
+select, flag = error, pattern = "S1ADS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S1BDS1_en";
+select, flag = error, pattern = "S1BDS1_body";
+select, flag = error, pattern = "S1BDS1_ex";
+ealign, arex :=  0.0395, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S1CDS1_en";
+select, flag = error, pattern = "S1CDS1_body";
+select, flag = error, pattern = "S1CDS1_ex";
+ealign, arex :=  0.042, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S1DDS1_en";
+select, flag = error, pattern = "S1DDS1_body";
+select, flag = error, pattern = "S1DDS1_ex";
+ealign, arex :=  0.0395, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S1EDS1_en";
+select, flag = error, pattern = "S1EDS1_body";
+select, flag = error, pattern = "S1EDS1_ex";
+ealign, arex :=  0.042, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S25DS1_en";
+select, flag = error, pattern = "S25DS1_body";
+select, flag = error, pattern = "S25DS1_ex";
+ealign, arex :=  0.04075, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S26DS1_en";
+select, flag = error, pattern = "S26DS1_body";
+select, flag = error, pattern = "S26DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S27DS1_en";
+select, flag = error, pattern = "S27DS1_body";
+select, flag = error, pattern = "S27DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S28DS1_en";
+select, flag = error, pattern = "S28DS1_body";
+select, flag = error, pattern = "S28DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S29DS1_en";
+select, flag = error, pattern = "S29DS1_body";
+select, flag = error, pattern = "S29DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S2ADS1_en";
+select, flag = error, pattern = "S2ADS1_body";
+select, flag = error, pattern = "S2ADS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S2BDS1_en";
+select, flag = error, pattern = "S2BDS1_body";
+select, flag = error, pattern = "S2BDS1_ex";
+ealign, arex :=  0.042, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S2CDS1_en";
+select, flag = error, pattern = "S2CDS1_body";
+select, flag = error, pattern = "S2CDS1_ex";
+ealign, arex :=  0.03825, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S2DDS1_en";
+select, flag = error, pattern = "S2DDS1_body";
+select, flag = error, pattern = "S2DDS1_ex";
+ealign, arex :=  0.042, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S2EDS1_en";
+select, flag = error, pattern = "S2EDS1_body";
+select, flag = error, pattern = "S2EDS1_ex";
+ealign, arex :=  0.0395, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S35DS1_en";
+select, flag = error, pattern = "S35DS1_body";
+select, flag = error, pattern = "S35DS1_ex";
+ealign, arex :=  0.042, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S36DS1_en";
+select, flag = error, pattern = "S36DS1_body";
+select, flag = error, pattern = "S36DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S37DS1_en";
+select, flag = error, pattern = "S37DS1_body";
+select, flag = error, pattern = "S37DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S38DS1_en";
+select, flag = error, pattern = "S38DS1_body";
+select, flag = error, pattern = "S38DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S39DS1_en";
+select, flag = error, pattern = "S39DS1_body";
+select, flag = error, pattern = "S39DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S3ADS1_en";
+select, flag = error, pattern = "S3ADS1_body";
+select, flag = error, pattern = "S3ADS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S3BDS1_en";
+select, flag = error, pattern = "S3BDS1_body";
+select, flag = error, pattern = "S3BDS1_ex";
+ealign, arex :=  0.04075, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S3CDS1_en";
+select, flag = error, pattern = "S3CDS1_body";
+select, flag = error, pattern = "S3CDS1_ex";
+ealign, arex :=  0.042, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S3DDS1_en";
+select, flag = error, pattern = "S3DDS1_body";
+select, flag = error, pattern = "S3DDS1_ex";
+ealign, arex :=  0.0395, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S3EDS1_en";
+select, flag = error, pattern = "S3EDS1_body";
+select, flag = error, pattern = "S3EDS1_ex";
+ealign, arex :=  0.03825, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S45DS1_en";
+select, flag = error, pattern = "S45DS1_body";
+select, flag = error, pattern = "S45DS1_ex";
+ealign, arex :=  0.03825, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S46DS1_en";
+select, flag = error, pattern = "S46DS1_body";
+select, flag = error, pattern = "S46DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S47DS1_en";
+select, flag = error, pattern = "S47DS1_body";
+select, flag = error, pattern = "S47DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S48DS1_en";
+select, flag = error, pattern = "S48DS1_body";
+select, flag = error, pattern = "S48DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S49DS1_en";
+select, flag = error, pattern = "S49DS1_body";
+select, flag = error, pattern = "S49DS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S4ADS1_en";
+select, flag = error, pattern = "S4ADS1_body";
+select, flag = error, pattern = "S4ADS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S4BDS1_en";
+select, flag = error, pattern = "S4BDS1_body";
+select, flag = error, pattern = "S4BDS1_ex";
+ealign, arex :=  0.042, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S4CDS1_en";
+select, flag = error, pattern = "S4CDS1_body";
+select, flag = error, pattern = "S4CDS1_ex";
+ealign, arex :=  0.042, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S4DDS1_en";
+select, flag = error, pattern = "S4DDS1_body";
+select, flag = error, pattern = "S4DDS1_ex";
+ealign, arex :=  0.037, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S4EDS1_en";
+select, flag = error, pattern = "S4EDS1_body";
+select, flag = error, pattern = "S4EDS1_ex";
+ealign, arex :=  0.042, arey :=0.0385;
+select, flag = error, clear;
+select, flag = error, pattern = "S51UHAI_en";
+select, flag = error, pattern = "S51UHAI_body";
+select, flag = error, pattern = "S51UHAI_ex";
+ealign, arex :=  -0.039, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S55DS1_en";
+select, flag = error, pattern = "S55DS1_body";
+select, flag = error, pattern = "S55DS1_ex";
+ealign, arex :=  0.03825, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S56DS1_en";
+select, flag = error, pattern = "S56DS1_body";
+select, flag = error, pattern = "S56DS1_ex";
+ealign, arex :=  0.037, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S57DS1_en";
+select, flag = error, pattern = "S57DS1_body";
+select, flag = error, pattern = "S57DS1_ex";
+ealign, arex :=  0.037, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S58DS1_en";
+select, flag = error, pattern = "S58DS1_body";
+select, flag = error, pattern = "S58DS1_ex";
+ealign, arex :=  0.037, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S59DS1_en";
+select, flag = error, pattern = "S59DS1_body";
+select, flag = error, pattern = "S59DS1_ex";
+ealign, arex :=  0.037, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S5ADS1_en";
+select, flag = error, pattern = "S5ADS1_body";
+select, flag = error, pattern = "S5ADS1_ex";
+ealign, arex :=  0.037, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S5BDS1_en";
+select, flag = error, pattern = "S5BDS1_body";
+select, flag = error, pattern = "S5BDS1_ex";
+ealign, arex :=  0.042, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S5CDS1_en";
+select, flag = error, pattern = "S5CDS1_body";
+select, flag = error, pattern = "S5CDS1_ex";
+ealign, arex :=  0.04075, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S5DDS1_en";
+select, flag = error, pattern = "S5DDS1_body";
+select, flag = error, pattern = "S5DDS1_ex";
+ealign, arex :=  0.042, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S5EDS1_en";
+select, flag = error, pattern = "S5EDS1_body";
+select, flag = error, pattern = "S5EDS1_ex";
+ealign, arex :=  0.04075, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S65DS1_en";
+select, flag = error, pattern = "S65DS1_body";
+select, flag = error, pattern = "S65DS1_ex";
+ealign, arex :=  0.042, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S66DS1_en";
+select, flag = error, pattern = "S66DS1_body";
+select, flag = error, pattern = "S66DS1_ex";
+ealign, arex :=  0.037, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S67DS1_en";
+select, flag = error, pattern = "S67DS1_body";
+select, flag = error, pattern = "S67DS1_ex";
+ealign, arex :=  0.037, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S68DS1_en";
+select, flag = error, pattern = "S68DS1_body";
+select, flag = error, pattern = "S68DS1_ex";
+ealign, arex :=  0.037, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S69DS1_en";
+select, flag = error, pattern = "S69DS1_body";
+select, flag = error, pattern = "S69DS1_ex";
+ealign, arex :=  0.037, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S6ADS1_en";
+select, flag = error, pattern = "S6ADS1_body";
+select, flag = error, pattern = "S6ADS1_ex";
+ealign, arex :=  0.037, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S6BDS1_en";
+select, flag = error, pattern = "S6BDS1_body";
+select, flag = error, pattern = "S6BDS1_ex";
+ealign, arex :=  0.03825, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S6CDS1_en";
+select, flag = error, pattern = "S6CDS1_body";
+select, flag = error, pattern = "S6CDS1_ex";
+ealign, arex :=  0.042, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S6DDS1_en";
+select, flag = error, pattern = "S6DDS1_body";
+select, flag = error, pattern = "S6DDS1_ex";
+ealign, arex :=  0.04075, arey :=0.0;
+select, flag = error, clear;
+select, flag = error, pattern = "S6EDS1_en";
+select, flag = error, pattern = "S6EDS1_body";
+select, flag = error, pattern = "S6EDS1_ex";
+ealign, arex :=  0.0395, arey :=0.0;
+select, flag = error, clear;
+
+};
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!		ADDING DIPOLE ERRORS
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+EA_rEFCOMP_MH(slice, rand_seed): macro = {
+
+eoption, add=true, seed=rand_seed;
+
+!!!ERROR DEFINITIONS
+!!Displacement errors
+eDX     =   0       ;           //200e-6;
+eDY     =   0       ;           //200e-6;
+eDS     =   0       ;           //200e-6;
+eDPSI   =   0; !1.9e-4  ;           //rotation of dipoles around s-axes
+
+!!Absolute systematic errors of the main dipoles
+RSys2n  =   0;!2.29063e-4 * LMH/ 9 ;
+RSys4n  =   0;!1.68153e-4 * LMH/ 9 ;
+RSys6n  =   0;!0.09823e-4 * LMH/ 9 ;
+
+!!Absolute random errors of the main dipoles
+rErr0n  =   0; !2.0e-4     * LMH/ 9 ;
+rErr1n  =   0; !0.36393e-4 * LMH/ 9 ;
+rErr1s  =   0;!0.68885e-4 * LMH/ 9 ;
+rErr2n  =   0;!0.30741e-4 * LMH/ 9 ;
+rErr2s  =   0;!0.35778e-4 * LMH/ 9 ;
+rErr3n  =   0;!0.11589e-4 * LMH/ 9 ;
+rErr3s  =   0;!0.24067e-4 * LMH/ 9 ;
+rErr4n  =   0;!0.10267e-4 * LMH/ 9 ;
+rErr4s  =   0;!0.26934e-4 * LMH/ 9 ;
+rErr5n  =   0;!0.02879e-4 * LMH/ 9 ;
+rErr5s  =   0;!0.03291e-4 * LMH/ 9 ;
+rErr6n  =   0;!0.03051e-4 * LMH/ 9 ;
+rErr6s  =   0;!0.05756e-4 * LMH/ 9 ;
+
+///Adding misalignments and field errors to dipoles         !quadrupoles and
+select, flag=error, clear;
+select, flag=error, PATTERN = mh1\.\.slice,  class=multipole ;       // , class=SBEND    ;
+select, flag=error, PATTERN = mh2\.\.slice,  class=multipole ;       // , class=SBEND    ;
+EALIGN, DPSI:=eDPSI*gauss()                         ;       //DX:=eDX*gauss(),DY:=eDY*gauss(),DS:=eDS*gauss();
+EFCOMP, radius=0.03, order = 0, dknr:={rErr0n*gauss(),rErr1n*gauss(),RSys2n+rErr2n*gauss(),rErr3n*gauss(),RSys4n+rErr4n*gauss(),rErr5n*gauss(),RSys6n+rErr6n*gauss()},
+        dksr:={0,rErr1s*gauss(),rErr2s*gauss(),rErr3s*gauss(),rErr4s*gauss(),rErr5s*gauss(),rErr6s*gauss()};
+
+};
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!		ADDING QUADRUPOLE ERROS
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+EA_rEFCOMP_QD(slice, rand_seed): macro = {
+
+eoption, add=true, seed = rand_seed;
+
+!!!ERROR DEFINITIONS
+!!Displacement errors
+eDX		=	0; !27e-6		;			//200e-6;
+eDY		=	0; !27e-6		;			//200e-6;
+eDS		=	0		;			//200e-6;
+eDPSI	=	0		;			//rotation around s-axes
+
+!!Relative systematic errors of the main quadrupoles
+RSysQD5n	=	0;!6.9e-4	*	1.3/9	;
+
+!!Relative random errors of the main quadrupoles
+rErrQD_1n = 5.17e-4 * 1.3 / 9; 0;12e-4	*	1.3/9	;
+rErrQD_1s = 0;!20e-4	*	1.3/9	;
+rErrQD_2n = 0;!0.7e-4	*	1.3/9	;
+rErrQD_2s = 0;!1.2e-4	*	1.3/9	;
+rErrQD_3n = 0;!2.7e-4	*	1.3/9	;
+rErrQD_3s = 0;!2.6e-4	*	1.3/9	;
+rErrQD_4n = 0;!1.0e-4	*	1.3/9	;
+rErrQD_4s = 0;!0.7e-4	*	1.3/9	;
+rErrQD_5n = 0;!3.45e-4	*	1.3/9	;
+rErrQD_5s = 0;!1.0e-4	*	1.3/9	;
+rErrQD_6n = 0;!0.3e-4	*	1.3/9	;
+rErrQD_6s = 0;!0.3e-4	*	1.3/9	;
+
+
+///Adding misalignments and field errors to dipoles			!quadrupoles and
+select, flag=error, clear;
+select, flag=error, pattern=qd11\.\.slice											;
+select, flag=error, pattern=qd12\.\.slice											;
+EALIGN, DX:=eDX*gauss(),DY:=eDY*gauss();				//,DS:=eDS*gauss(),DPSI:=eDPSI*gauss()	;
+EFCOMP, radius=0.04, order = 1,
+		dknr:={0,rErrQD_1n*gauss(),rErrQD_2n*gauss(),rErrQD_3n*gauss(),rErrQD_4n*gauss(),(RSysQD5n+rErrQD_5n*gauss()),rErrQD_6n*gauss()},		!
+		dksr:={0,rErrQD_1s*gauss(),rErrQD_2s*gauss(),rErrQD_3s*gauss(),rErrQD_4s*gauss(), rErrQD_5s*gauss(),rErrQD_6s*gauss()};					!
+
+};
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!		ACCESSING DATA IN THE TABLE
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+table_data (vara,varb,varc): macro =
+{
+	myvarb= table (vara,varb,varc);
+};
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!		CREATING 6D BEAM DISTRIBUTION
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+6D_beam(gauss_cut,init_param_table) : macro={
+
+	create_transverse=0;			//to control transversal distribution creation
+	create_tpt=0;					//to control t-pt distribution creation
+
+	while(create_tpt<1)
+	{
+		tdist	= tgauss(gauss_cut) ;
+		ptdist	= tgauss(gauss_cut) ;
+		!value, tdist, ptdist;
+
+		if (sqrt(tdist^2+ptdist^2)<= gauss_cut)
+		{
+			ptstart	=	pt_gauss*ptdist	;		//pt_rms takes into account coefficient to compensate for gaussian cut at 2 sigma
+			tstart	=	ct_gauss*tdist	;		//ct_rms takes into account coefficient to compensate for gaussian cut at 2 sigma
+
+			!ptstart=delta_rms*betaRel*ptdist;
+			!tstart=bunch_length/betaRel*tdist;
+			!value, tstart,ptstart;
+
+			create_tpt=1;
+		}
+	}
+
+
+	while(create_transverse<1)
+	{
+		xdist	= tgauss(gauss_cut) ;
+		pxdist	= tgauss(gauss_cut) ;
+		ydist	= tgauss(gauss_cut) ;
+		pydist	= tgauss(gauss_cut) ;
+
+		if (sqrt(xdist^2+pxdist^2+ydist^2+pydist^2)<= gauss_cut)
+		{
+				exec, start_coord(x,xdist,pxdist,ptstart,init_param_table,gauss_cut);
+				exec, start_coord(y,ydist,pydist,ptstart,init_param_table,gauss_cut);
+				create_transverse=1;
+				start,x=xstart, px=pxstart, y=ystart, py=pystart, t=tstart, pt=ptstart;
+		}
+	}
+
+};
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!		creating matched distribution in X- or Y-plane, compensating for gaussian cut at 2 sigma, to get the same rms emittance_x.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+start_coord(coordinate,rand1,rand2,randpt,init_param_table,gauss_cut) : macro={
+
+	eps				=	epscoordinate_gauss															;	//epscoordinate_gauss	 takes into account coefficient to compensate for gaussian cut at 2 sigma
+	!eps				=	epscoordinate_rms_fin																	;
+
+	co_pos			=	0	;										//table(init_param_table, coordinate,1)			;
+	co_pos_prime	=	0	;										//table(init_param_table, pcoordinate,1)		;
+
+	beta			=	table(init_param_table, betcoordinate,1)													;
+	alfa			=	table(init_param_table, alfcoordinate,1)													;
+
+	disp			=	table(init_param_table, dcoordinate,1)														;
+	dispprime		=	table(init_param_table, dpcoordinate,1)														;
+
+	betatronpos		=	sqrt(beta*eps)*rand1																		;
+
+	coordinatestart	=	betatronpos+disp*randpt+co_pos																;
+	pcoordinatestart=	(rand2*sqrt(eps)/sqrt(beta)-alfa/beta*betatronpos)+dispprime*randpt+co_pos_prime			;
+
+	!value, eps, coordinatestart, pcoordinatestart, disp, dispprime, co_pos, co_pos_prime,beta,alfa,twissgamma,eps		;
+
+	//betatronpos=sqrt(beta)*gauss()*coordinatescale/sqrt(2)*sqrt(emittance);
+	//pcoordinatestart=(gauss()*coordinatescale/sqrt(2)*sqrt(emittance)/sqrt(beta)-alfa/beta*betatronpos)+dispprime*pt+co_pos_prime;
+
+
+};
+
+
+option, -echo,-info,-warn;
