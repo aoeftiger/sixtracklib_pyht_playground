@@ -1,0 +1,12 @@
+//
+//
+//Quadrupole strengths 'k1nl' for 
+//
+//          SIS100_VIRTUAL_FAST  Extraction
+//
+//
+k1nl_S00QD1D :=  -0.2789339365200397 ; 
+k1nl_S00QD1F :=  0.27996808015181074 ; 
+k1nl_S00QD2F :=  0.27996808015181074 ; 
+k1nl_S52QD11 :=  -0.2789339365200397 ; 
+k1nl_S52QD12 :=  0.27996808015181074 ; 
